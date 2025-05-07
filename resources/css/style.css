@@ -1,0 +1,219 @@
+
+/* Estilo general del cuerpo de la página */
+body {
+    background: linear-gradient(to right, #E2E2E2, #C9D6FF);
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    padding-top: 60px;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+  
+  /* Estilo de los párrafos */
+  p {
+    font-size: 16px;
+  }
+  
+  .navbar-brand i {
+    margin-right: 5px;
+  }
+  
+  .nav-link i {
+    margin-right: 3px;
+  }
+  
+  .dropdown-menu .dropdown-item i {
+    margin-right: 5px;
+  }
+  
+  /* Asegura que el menú desplegable no se salga de la pantalla */
+  .dropdown-menu {
+    right: 0;
+    left: auto;
+  }
+  
+  /* Estilo de la barra de navegación */
+  .navbar {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+  }
+  
+  /* Estilo del logo en la barra de navegación */
+  .navbar-brand {
+    font-size: 1.2rem;
+    color: white;
+  }
+  
+  /* Estilo de los enlaces de navegación */
+  .navbar-nav .nav-link {
+    padding: 0.3rem 0.8rem;
+    color: white;
+  }
+  
+  /* Estilo de los enlaces de navegación al pasar el cursor */
+  .navbar-nav .nav-link:hover {
+    background-color: #0056b3;
+    border-radius: 5px;
+  }
+  
+  /* Estilo del icono del toggler de navegación */
+  .navbar-toggler-icon {
+    background-color: white;
+  }
+  
+  /* Estilo de la sección hero */
+  .hero-section {
+    position: relative;
+    color: white;
+    text-align: center;
+    padding: 100px 20px;
+    overflow: hidden;
+  }
+  
+  /* Pseudo-elemento para el fondo de la sección hero */
+  .hero-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #002244;
+    background-attachment: fixed;
+    filter: blur(5px);
+    z-index: -1;
+  }
+  
+  /* Estilo del título en la sección hero */
+  .hero-section h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
+  
+  /* Estilo de los párrafos en la sección hero */
+  .hero-section p {
+    font-size: 1rem;
+    margin: 20px 0;
+  }
+  
+  /* Estilo de los títulos de sección */
+  .section-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Estilo del cuerpo de las tarjetas */
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  /* Estilo del texto dentro de las tarjetas */
+  .card-text {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  /* Estilo de las tarjetas */
+  .card {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    max-width: 100%;
+  }
+  
+  /* Estilo de las tarjetas al pasar el cursor */
+  .card:hover {
+    transform: translateY(-10px);
+  }
+  
+  /* Estilo del botón de llamada a la acción */
+  .cta-button {
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    text-decoration: none;
+  }
+  
+  /* Estilo del botón al pasar el cursor */
+  .cta-button:hover {
+    background-color: #002244;
+  }
+  
+  /* Estilo de las imágenes en las tarjetas */
+  .card-img-top {
+    width: 300px !important;
+    height: 300px !important;
+    object-fit: cover; /* Para mantener la proporción y evitar deformaciones */
+  }
+  
+  /* Estilo para el contenedor de la imagen */
+  .image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  /* Estilo para la imagen dentro del contenedor */
+  .image-container img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  
+  /* Estilo del aside */
+  aside {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Estilo del footer */
+  footer {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  /* Estilo de los enlaces en el footer */
+  .footer a {
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+  
+  /* Estilo de los iconos en el footer */
+  .footer .icon-hover i {
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+  
+  /* Estilo de los iconos al pasar el cursor */
+  .footer .icon-hover:hover i {
+    color: #090908;
+    transform: scale(1.1);
+  }
+  
+  /* Media Queries para responsividad */
+  @media (max-width: 768px) {
+    .hero-section h1 {
+      font-size: 2rem;
+    }
+  
+    .section-title {
+      font-size: 1.5rem;
+    }
+  
+    .card {
+      margin-bottom: 20px;
+    }
+  }
+  
+  
+  
+  
