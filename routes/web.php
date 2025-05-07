@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BlogController;
+
 
 // Ruta para la página principal
 Route::get('/launchix', function () {
@@ -43,3 +45,7 @@ Route::get('/soporte-tecnico', function () {
 
 
 Route::put('/user-data/update', [UserController::class, 'updateUserData'])->name('user-data.update');
+
+    Route::post('/blogs', [BlogController::class, 'store'])->name('blogs.store');
+
+    Route::get('/usuario', [UserController::class, 'showUsuarioView'])->name('usuario');

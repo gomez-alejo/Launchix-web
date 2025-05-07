@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Category;
 
 class UserController extends Controller
 {
@@ -153,4 +154,13 @@ public function updateProfilePicture(Request $request)
     return redirect()->route('usuario')->with('success', 'Fotos actualizadas exitosamente.');
 }
 
+
+// En tu controlador
+    public function showUsuarioView()
+    {
+        $user = Auth::user(); // Obtener el usuario autenticado
+        $categories = Category::all(); // Obtener todas las categorías
+
+        return view('usuario', compact('user', 'categories'));
+    }
 }
