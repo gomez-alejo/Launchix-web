@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
+    public function index()
+{
+    $blogs = Blog::all(); // Obtén los blogs desde la base de datos
+    return view('blogs', compact('blogs'));
+}
     public function store(Request $request)
     {
         $request->validate([

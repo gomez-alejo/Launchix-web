@@ -11,7 +11,7 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="{{ url('/launchix') }}"><i class="fas fa-home"></i> Inicio</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url('emprendimiento') }}"><i class="fas fa-lightbulb"></i> Emprendimiento</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url('blog') }}"><i class="fas fa-blog"></i> Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url('blogs') }}"><i class="fas fa-blog"></i> Blog</a></li>
                     <li class="nav-item"><a class="nav-link" href="#faq"><i class="fas fa-question-circle"></i> FAQ</a></li>
                 </ul>
                 <ul class="navbar-nav">

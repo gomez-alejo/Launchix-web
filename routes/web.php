@@ -12,6 +12,10 @@ Route::get('/launchix', function () {
     return view('launchix');
 })->name('home');
 
+Route::get('/launchix/blogs', function () {
+    return view('blogs');
+})->name('blogs');
+
 // Rutas para autenticación
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -49,3 +53,7 @@ Route::put('/user-data/update', [UserController::class, 'updateUserData'])->name
     Route::post('/blogs', [BlogController::class, 'store'])->name('blogs.store');
 
     Route::get('/usuario', [UserController::class, 'showUsuarioView'])->name('usuario');
+
+    // En routes/web.php
+Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
+

@@ -22,19 +22,23 @@
                 <h3 id="profileName">{{ $user->username }}</h3>
                 <p id="profileDescription">{{ $user->description }}</p>
 
-                <!-- Contenedor para los botones -->
-                <div class="button-container mt-4 d-flex justify-content-between align-items-center">
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">Editar Perfil</button>
-                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#userDataModal">Datos de Usuario</button>
-                        <button type="button" class="btn btn-outline-secondary">Publicaciones</button>
+                    <!-- Contenedor para los botones -->
+                    <div class="button-container mt-4 d-flex justify-content-between align-items-center">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">Editar Perfil</button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#userDataModal">Datos de Usuario</button>
+                            <button type="button" id="showBlogsButton" class="btn btn-outline-secondary">Publicaciones</button>
+                        </div>
+                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#blogModal">Publicar Blogs</button>
                     </div>
-                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#blogModal">Publicar Blogs</button>
-                </div>
             </div>
         </div>
     </div>
 
+            <!-- Contenedor para los blogs -->
+        <div id="blogsContainer" class="mt-4">
+            <!-- Aquí se cargarán los blogs -->
+        </div>
     <!-- Mensajes de éxito y error -->
     @if (session('success'))
         <div class="alert alert-success">
@@ -164,7 +168,16 @@
 </div>
 
 
-    <script src="@vite(['resources/js/usuario.js'])"></script>
+    <script>
+    document.getElementById('showBlogsButton').addEventListener('click', function() {
+        fetch('{{ route("blogs.index") }}')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('blogsContainer').innerHTML = data;
+            })
+            .catch(error => console.error('Error:', error));
+    });
+    </script>
 
 @endsection
 
