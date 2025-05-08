@@ -12,23 +12,33 @@ class Blog extends Model
      * @var array
      */
     protected $fillable = [
-        'title',
-        'content',
-        'image_path',
-        'category_id',
-        'user_id',
+        'title',        // Título del blog
+        'content',      // Contenido del blog
+        'image_path',   // Ruta de la imagen asociada al blog
+        'category_id',  // ID de la categoría a la que pertenece el blog
+        'user_id',      // ID del usuario que creó el blog
         // otros campos que desees permitir para asignación masiva
     ];
 
-    // Si tienes relaciones definidas, también puedes incluirlas aquí
+    /**
+     * Define la relación con el modelo Category.
+     * Un blog pertenece a una categoría.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
+    /**
+     * Define la relación con el modelo User.
+     * Un blog pertenece a un usuario.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 }
-

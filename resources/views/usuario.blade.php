@@ -9,36 +9,49 @@
     <div class="container mt-5 pt-5 my-5">
         <div class="row">
             <div class="col-md-12">
+                <!-- Contenedor para la foto de portada y perfil -->
                 <div class="cover-pic-container">
+                    <!-- Foto de portada -->
                     <img id="coverPic" src="https://via.placeholder.com/750x300" alt="Foto de portada" class="img-fluid">
                     <input type="file" id="coverPicInput" class="d-none">
+                    <!-- Icono de cámara para cambiar la foto de portada -->
                     <div class="camera-icon" id="coverCameraIcon"><i class="fas fa-camera"></i></div>
+                    <!-- Contenedor para la foto de perfil -->
                     <div class="profile-pic-container">
+                        <!-- Foto de perfil -->
                         <img id="profilePic" src="https://via.placeholder.com/150" alt="Foto de perfil" class="img-fluid rounded-circle">
                         <input type="file" id="profilePicInput" class="d-none">
+                        <!-- Icono de cámara para cambiar la foto de perfil -->
                         <div class="camera-icon" id="profileCameraIcon"><i class="fas fa-camera"></i></div>
                     </div>
                 </div>
+                <!-- Nombre de usuario -->
                 <h3 id="profileName">{{ $user->username }}</h3>
+                <!-- Descripción del usuario -->
                 <p id="profileDescription">{{ $user->description }}</p>
 
-                    <!-- Contenedor para los botones -->
-                    <div class="button-container mt-4 d-flex justify-content-between align-items-center">
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">Editar Perfil</button>
-                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#userDataModal">Datos de Usuario</button>
-                            <button type="button" id="showBlogsButton" class="btn btn-outline-secondary">Publicaciones</button>
-                        </div>
-                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#blogModal">Publicar Blogs</button>
+                <!-- Contenedor para los botones -->
+                <div class="button-container mt-4 d-flex justify-content-between align-items-center">
+                    <div class="btn-group" role="group">
+                        <!-- Botón para editar perfil -->
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">Editar Perfil</button>
+                        <!-- Botón para ver datos de usuario -->
+                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#userDataModal">Datos de Usuario</button>
+                        <!-- Botón para ver publicaciones -->
+                        <button type="button" id="showBlogsButton" class="btn btn-outline-secondary">Publicaciones</button>
                     </div>
+                    <!-- Botón para publicar blogs -->
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#blogModal">Publicar Blogs</button>
+                </div>
             </div>
         </div>
     </div>
 
-            <!-- Contenedor para los blogs -->
-        <div id="blogsContainer" class="mt-4">
-            <!-- Aquí se cargarán los blogs -->
-        </div>
+    <!-- Contenedor para los blogs -->
+    <div id="blogsContainer" class="mt-4">
+        <!-- Aquí se cargarán los blogs -->
+    </div>
+
     <!-- Mensajes de éxito y error -->
     @if (session('success'))
         <div class="alert alert-success">
@@ -61,6 +74,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <!-- Formulario para editar perfil -->
                     <form id="editProfileForm" action="{{ route('profile.update') }}" method="POST">
                         @csrf
                         @method('PUT')
@@ -88,6 +102,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <!-- Formulario para editar datos de usuario -->
                     <form id="editUserDataForm" action="{{ route('user-data.update') }}" method="POST">
                         @csrf
                         @method('PUT')
@@ -122,52 +137,53 @@
         </div>
     </div>
 
-<!-- Modal para Publicar Blogs -->
-<div class="modal fade" id="blogModal" tabindex="-1" aria-labelledby="blogModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="blogModalLabel">Publicar Blog</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="blogForm" action="{{ route('blogs.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Título</label>
-                        <input type="text" class="form-control" id="title" name="title" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="content" class="form-label">Contenido</label>
-                        <textarea class="form-control" id="content" name="content" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="image_path" class="form-label">Imagen</label>
-                        <input type="file" class="form-control" id="image_path" name="image_path">
-                    </div>
-                    <div class="mb-3">
-                        <label for="category_id" class="form-label">Categoría</label>
-                        <select class="form-control" id="category_id" name="category_id" required>
-                            <option value="">Seleccione una categoría</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="user_id" class="form-label">Usuario</label>
-                        <select class="form-control" id="user_id" name="user_id" required>
-                            <option value="{{ $user->id }}">{{ $user->username }}</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Publicar</button>
-                </form>
+    <!-- Modal para Publicar Blogs -->
+    <div class="modal fade" id="blogModal" tabindex="-1" aria-labelledby="blogModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="blogModalLabel">Publicar Blog</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulario para publicar blogs -->
+                    <form id="blogForm" action="{{ route('blogs.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Título</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Contenido</label>
+                            <textarea class="form-control" id="content" name="content" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="image_path" class="form-label">Imagen</label>
+                            <input type="file" class="form-control" id="image_path" name="image_path">
+                        </div>
+                        <div class="mb-3">
+                            <label for="category_id" class="form-label">Categoría</label>
+                            <select class="form-control" id="category_id" name="category_id" required>
+                                <option value="">Seleccione una categoría</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="user_id" class="form-label">Usuario</label>
+                            <select class="form-control" id="user_id" name="user_id" required>
+                                <option value="{{ $user->id }}">{{ $user->username }}</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Publicar</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-
+    <!-- Script para cargar blogs -->
     <script>
     document.getElementById('showBlogsButton').addEventListener('click', function() {
         fetch('{{ route("blogs.index") }}')
@@ -180,4 +196,3 @@
     </script>
 
 @endsection
-

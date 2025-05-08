@@ -1,11 +1,13 @@
 <!-- resources/views/include/footer.blade.php -->
-<footer class="footer text-light py-5 ">
+<footer class="footer text-light py-5">
     <div class="container">
         <div class="row">
+            <!-- Columna "Sobre Nosotros" -->
             <div class="col-md-3 mb-3">
                 <h5 class="text-uppercase">Sobre Nosotros</h5>
                 <p class="small">Launchix es tu plataforma ideal para emprender, vender y conectar con clientes en Timbío. Nuestra misión es impulsar tu negocio al éxito.</p>
             </div>
+            <!-- Columna "Enlaces Útiles" -->
             <div class="col-md-3 mb-3">
                 <h5 class="text-uppercase">Enlaces Útiles</h5>
                 <ul class="list-unstyled">
@@ -17,12 +19,14 @@
                     <li><a href="{{ url('faq') }}" class="text-light">FAQ</a></li>
                 </ul>
             </div>
+            <!-- Columna "Contáctanos" -->
             <div class="col-md-3 mb-3">
                 <h5 class="text-uppercase">Contáctanos</h5>
                 <p class="small mb-1"><i class="fas fa-envelope"></i> soporte@launchix.com</p>
                 <p class="small mb-1"><i class="fas fa-phone"></i> +57 320 123 4567</p>
                 <p class="small"><i class="fas fa-map-marker-alt"></i> Timbío, Cauca, Colombia</p>
             </div>
+            <!-- Columna "Síguenos" -->
             <div class="col-md-3 mb-3">
                 <h5 class="text-uppercase">Síguenos</h5>
                 <div class="d-flex">
@@ -33,8 +37,10 @@
                 </div>
             </div>
         </div>
+        <!-- Línea divisoria -->
         <hr class="my-4 text-secondary">
         <div class="row">
+            <!-- Información de derechos de autor y enlaces legales -->
             <div class="col text-center">
                 <p class="small mb-0">&copy; 2024 Launchix. Todos los derechos reservados</p>
                 <p class="small mb-0">Política de Privacidad | Términos de Uso</p>

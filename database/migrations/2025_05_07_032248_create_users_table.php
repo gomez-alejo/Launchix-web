@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('password');
-            $table->text('description')->nullable(); // Agregar la columna 'description' como texto y permitir valores nulos
+            $table->text('description')->nullable(); //  'description' como texto y permitir valores nulos
             $table->timestamps();
         });
     }
