@@ -42,7 +42,7 @@ class UserController extends Controller
             return redirect()->route('3
             ')->with('success', 'Perfil actualizado exitosamente.'); // Redirige con mensaje de éxito
         } catch (\Exception $e) {
-            return redirect()->route('usuario')->with('error', 'Ocurrió un error al actualizar el perfil: ' . $e->getMessage()); // Manejo de errores
+            return redirect()->route('usuario.view')->with('error', 'Ocurrió un error al actualizar el perfil: ' . $e->getMessage()); // Manejo de errores
         }
     }
 

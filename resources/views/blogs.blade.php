@@ -10,6 +10,8 @@
     .card {
         margin-bottom: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        height: 350px; /* Altura fija para las tarjetas */
+        overflow: hidden; /* Oculta el contenido que se desborde */
     }
     .search-container {
         margin-bottom: 20px;
@@ -49,6 +51,30 @@
     .comment {
         border-bottom: 1px solid #eee;
         padding: 10px 0;
+    }
+    .card-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.75rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* Limita el título a 2 líneas */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .card-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* Limita el contenido a 3 líneas */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .modal-title {
+        word-wrap: break-word; /* Permite que el texto del título salte de línea si es demasiado largo */
+        white-space: normal; /* Permite que el texto se ajuste automáticamente */
+    }
+    .modal-body p {
+        word-wrap: break-word; /* Permite que el texto del contenido salte de línea si es demasiado largo */
+        white-space: normal; /* Permite que el texto se ajuste automáticamente */
     }
 </style>
 <div class="container mt-5 pt-5 my-5">
@@ -109,7 +135,7 @@
                                         <label for="star1-{{ $blog->id }}">★</label>
                                     </div>
                                     <div class="comments-list">
-                                     
+
                                     </div>
                                     <div class="comment-section">
                                         <textarea class="form-control" rows="2" placeholder="Añadir un comentario..."></textarea>
@@ -127,6 +153,7 @@
         </div>
     </div>
 </div>
+@endsection
 
 <script>
     // Función para filtrar blogs por categoría
@@ -165,4 +192,3 @@
         }
     });
 </script>
-@endsection

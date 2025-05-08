@@ -52,7 +52,7 @@ Route::put('/user-data/update', [UserController::class, 'updateUserData'])->name
 
     Route::post('/blogs', [BlogController::class, 'store'])->name('blogs.store');
 
-    Route::get('/usuario', [UserController::class, 'showUsuarioView'])->name('usuario');
+    Route::get('/usuario', [UserController::class, 'showUsuarioView'])->name('usuario.view');
 
     // En routes/web.php
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
