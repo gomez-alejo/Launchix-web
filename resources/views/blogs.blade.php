@@ -76,7 +76,24 @@
         word-wrap: break-word; /* Permite que el texto del contenido salte de línea si es demasiado largo */
         white-space: normal; /* Permite que el texto se ajuste automáticamente */
     }
+    .like-button i, .btn-link i {
+        margin-right: 5px;
+    }
+    .like-button {
+        color: #ccc;
+        cursor: pointer;
+    }
+    .like-button.liked {
+        color: #ff0000;
+    }
+    .edit-comment, .delete-comment {
+        margin-left: 10px;
+    }
+    .edit-comment i, .delete-comment i {
+        margin-right: 5px;
+    }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <div class="container mt-5 pt-5 my-5">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -104,7 +121,15 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ $blog->title }}</h5>
                                 <p class="card-text">{{ Str::limit($blog->content, 100) }}</p>
-                                <span class="badge badge-primary">{{ $blog->category->name }}</span>
+                                <span class="badge badge-primary">{{ strtolower($blog->category->name) }}</span>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <button class="btn btn-link" data-toggle="modal" data-target="#commentsModal{{ $blog->id }}">
+                                        <i class="fas fa-comment"></i> Comentarios
+                                    </button>
+                                    <button class="btn btn-link like-button" data-blog-id="{{ $blog->id }}">
+                                        <i class="fas fa-heart"></i> Me gusta
+                                    </button>
+                                </div>
                                 <button class="btn btn-primary" data-toggle="modal" data-target="#blogModal{{ $blog->id }}">Leer más</button>
                             </div>
                         </div>
@@ -134,12 +159,52 @@
                                         <input type="radio" id="star1-{{ $blog->id }}" name="rating-{{ $blog->id }}" value="1" />
                                         <label for="star1-{{ $blog->id }}">★</label>
                                     </div>
-                                    <div class="comments-list">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <!-- Modal para Comentarios -->
+                    <div class="modal fade" id="commentsModal{{ $blog->id }}" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel{{ $blog->id }}" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="commentsModalLabel{{ $blog->id }}">Comentarios</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="comments-list">
+                                        <!-- Aquí se cargarán los comentarios -->
+                                        @foreach($blog->comments as $comment)
+                                            <div class="comment">
+                                                <p>{{ $comment->content }}</p>
+                                                <div class="d-flex justify-content-end">
+                                                    <button class="btn btn-sm btn-primary edit-comment" data-comment-id="{{ $comment->id }}" data-comment-content="{{ $comment->content }}">
+                                                        <i class="fas fa-edit"></i> Editar
+                                                    </button>
+                                                    <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" style="display: inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger delete-comment">
+                                                            <i class="fas fa-trash-alt"></i> Eliminar
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        @endforeach
                                     </div>
                                     <div class="comment-section">
-                                        <textarea class="form-control" rows="2" placeholder="Añadir un comentario..."></textarea>
-                                        <button class="btn btn-sm btn-primary mt-2">Comentar</button>
+                                        <form action="{{ route('comments.store') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="blog_id" value="{{ $blog->id }}">
+                                            <textarea class="form-control" rows="2" name="content" placeholder="Añadir un comentario..."></textarea>
+                                            <button type="submit" class="btn btn-sm btn-primary mt-2">Comentar</button>
+                                        </form>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -155,40 +220,67 @@
 </div>
 @endsection
 
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
-    // Función para filtrar blogs por categoría
-    $('.btn-group .btn').on('click', function() {
-        const category = $(this).data('category');
-        $('.blog-container .col-md-4').each(function() {
-            const blogCategory = $(this).find('.badge').text().toLowerCase();
-            if (category === 'all' || blogCategory === category) {
-                $(this).show();
-            } else {
-                $(this).hide();
+    $(document).ready(function() {
+        // Función para filtrar blogs por categoría
+        $('.btn-group .btn').on('click', function() {
+            const category = $(this).data('category');
+            $('.blog-container .col-md-4').each(function() {
+                const blogCategory = $(this).find('.badge').text().toLowerCase();
+                if (category === 'all' || blogCategory === category) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+
+        // Función para buscar blogs en tiempo real
+        $('#searchInput').on('input', function() {
+            const searchTerm = $(this).val().toLowerCase();
+            $('.blog-container .col-md-4').each(function() {
+                const title = $(this).find('.card-title').text().toLowerCase();
+                const content = $(this).find('.card-text').text().toLowerCase();
+                if (title.includes(searchTerm) || content.includes(searchTerm)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+
+        // Función para manejar la edición de comentarios
+        $('.edit-comment').on('click', function() {
+            const commentId = $(this).data('comment-id');
+            const commentContent = $(this).data('comment-content');
+
+            const newContent = prompt('Editar comentario:', commentContent);
+            if (newContent !== null) {
+                $.ajax({
+                    url: '/comments/' + commentId,
+                    type: 'PUT',
+                    data: {
+                        content: newContent,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        alert('Comentario actualizado con éxito');
+                        location.reload(); // Recargar la página para ver los cambios
+                    },
+                    error: function(xhr) {
+                        alert('Error al actualizar el comentario');
+                    }
+                });
             }
         });
-    });
 
-    // Función para buscar blogs en tiempo real
-    $('#searchInput').on('input', function() {
-        const searchTerm = $(this).val().toLowerCase();
-        $('.blog-container .col-md-4').each(function() {
-            const title = $(this).find('.card-title').text().toLowerCase();
-            const content = $(this).find('.card-text').text().toLowerCase();
-            if (title.includes(searchTerm) || content.includes(searchTerm)) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
+        // Función para manejar los "me gusta"
+        $('.like-button').on('click', function() {
+            const blogId = $(this).data('blog-id');
+            $(this).toggleClass('liked');
+            // Aquí puedes agregar la lógica para manejar el "me gusta" en el servidor
+            alert('Me gusta en el blog: ' + blogId);
         });
-    });
-
-    // Función para manejar el envío de comentarios
-    $('.comment-section button').on('click', function() {
-        const comment = $(this).siblings('textarea').val();
-        if (comment.trim() !== '') {
-            alert('Comentario enviado: ' + comment);
-            $(this).siblings('textarea').val('');
-        }
     });
 </script>

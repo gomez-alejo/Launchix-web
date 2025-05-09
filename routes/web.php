@@ -5,6 +5,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CommentController;
 
 
 // Ruta para la página principal
@@ -57,3 +58,7 @@ Route::put('/user-data/update', [UserController::class, 'updateUserData'])->name
     // En routes/web.php
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
 
+
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');

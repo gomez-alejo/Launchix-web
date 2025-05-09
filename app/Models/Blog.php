@@ -41,4 +41,14 @@ class Blog extends Model
     {
         return $this->belongsTo(User::class);
     }
+        /**
+     * Define la relación con el modelo Comment.
+     * Un blog puede tener muchos comentarios.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

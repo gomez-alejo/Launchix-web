@@ -14,8 +14,9 @@ class BlogController extends Controller
      */
     public function index()
     {
-        // Obtiene todos los blogs desde la base de datos
-        $blogs = Blog::all();
+        // Obtiene todos los blogs desde la base de datos, cargando los comentarios asociados
+        $blogs = Blog::with('comments')->get();
+
         // Retorna la vista de blogs con los datos de los blogs
         return view('blogs', compact('blogs'));
     }
