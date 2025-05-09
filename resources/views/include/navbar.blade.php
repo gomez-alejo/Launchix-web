@@ -42,7 +42,8 @@
                         </li>
                     @else
                         <!-- Enlace para iniciar sesión o registrarse -->
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/login') }}"><i class="fas fa-user"></i> Iniciar Sesión / Registro</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/login') }}"><i class="fas fa-user"></i> Iniciar Sesión</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/register') }}"><i class="fas fa-user"></i> registrarse</a></li>
                     @endif
                 </ul>
             </div>

@@ -250,37 +250,7 @@
             });
         });
 
-        // Función para manejar la edición de comentarios
-        $('.edit-comment').on('click', function() {
-            const commentId = $(this).data('comment-id');
-            const commentContent = $(this).data('comment-content');
 
-            const newContent = prompt('Editar comentario:', commentContent);
-            if (newContent !== null) {
-                $.ajax({
-                    url: '/comments/' + commentId,
-                    type: 'PUT',
-                    data: {
-                        content: newContent,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        alert('Comentario actualizado con éxito');
-                        location.reload(); // Recargar la página para ver los cambios
-                    },
-                    error: function(xhr) {
-                        alert('Error al actualizar el comentario');
-                    }
-                });
-            }
-        });
 
-        // Función para manejar los "me gusta"
-        $('.like-button').on('click', function() {
-            const blogId = $(this).data('blog-id');
-            $(this).toggleClass('liked');
-            // Aquí puedes agregar la lógica para manejar el "me gusta" en el servidor
-            alert('Me gusta en el blog: ' + blogId);
-        });
-    });
+
 </script>
