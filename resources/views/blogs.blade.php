@@ -26,7 +26,7 @@
     }
     .rating > label {
         display: inline-block;
-        font-size: 20px; 
+        font-size: 20px;
         color: #ccc;
         cursor: pointer;
     }
@@ -183,8 +183,7 @@
                                                 <p>{{ $comment->content }}</p>
                                                 <div class="d-flex justify-content-end">
                                                     <button onclick="editComment({{ $comment->id }}, '{{ $comment->content }}')" class="btn btn-sm btn-primary edit-comment">
-                                                     <i class="fas fa-edit"></i> Editar
-                                                       </button>
+                                                        <i class="fas fa-edit"></i> Editar
                                                     </button>
                                                     <button onclick="deleteComment({{ $comment->id }})" class="btn btn-sm btn-danger delete-comment">
                                                         <i class="fas fa-trash-alt"></i> Eliminar
@@ -216,31 +215,29 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
-    
     function editComment(commentId, commentContent) {
-    let newContent = prompt("Edita tu comentario:", commentContent);
-    if (newContent !== null) {
-        fetch(/comments/${commentId}/update, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ content: newContent })
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-            location.reload();
-        })
-        .catch(error => console.error('Error:', error));
+        let newContent = prompt("Edita tu comentario:", commentContent);
+        if (newContent !== null) {
+            fetch(`/comments/${commentId}/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ content: newContent })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
+        }
     }
-}
-
 
     function deleteComment(commentId) {
         if (confirm("¿Estás seguro de que deseas eliminar este comentario?")) {
-            fetch(/comments/${commentId}, {
+            fetch(`/comments/${commentId}`, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
