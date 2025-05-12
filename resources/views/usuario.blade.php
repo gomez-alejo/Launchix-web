@@ -186,12 +186,12 @@
     <!-- Script para cargar blogs -->
     <script>
     document.getElementById('showBlogsButton').addEventListener('click', function() {
-        fetch('{{ route("blogs.index") }}')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('blogsContainer').innerHTML = data;
-            })
-            .catch(error => console.error('Error:', error));
+     fetch('{{ route("usuario.blogs", ["userId" => $user->id]) }}')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('blogsContainer').innerHTML = data;
+        })
+        .catch(error => console.error('Error:', error));
     });
     </script>
 

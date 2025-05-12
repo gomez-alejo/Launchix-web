@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,11 +37,9 @@ class UserController extends Controller
             // Actualiza los datos del perfil del usuario
             $user->username = $validatedData['username'];
             $user->description = $validatedData['userDescription'];
-             /** @var \App\Models\User $user */
             $user->save(); // Guarda los cambios en la base de datos
 
-            return redirect()->route('3
-            ')->with('success', 'Perfil actualizado exitosamente.'); // Redirige con mensaje de éxito
+            return redirect()->route('usuario')->with('success', 'Perfil actualizado exitosamente.'); // Redirige con mensaje de éxito
         } catch (\Exception $e) {
             return redirect()->route('usuario')->with('error', 'Ocurrió un error al actualizar el perfil: ' . $e->getMessage()); // Manejo de errores
         }
@@ -75,7 +74,6 @@ class UserController extends Controller
             $user->lastName = $validatedData['lastName'];
             $user->email = $validatedData['email'];
             $user->password = Hash::make($validatedData['new_password']); // Encripta la nueva contraseña
-             /** @var \App\Models\User $user */
             $user->save(); // Guarda los cambios en la base de datos
 
             return redirect()->route('usuario')->with('success', 'Datos de usuario actualizados exitosamente.'); // Redirige con mensaje de éxito
@@ -94,11 +92,14 @@ class UserController extends Controller
         }
 
         try {
-             /** @var \App\Models\User $user */
+            // Elimina todos los blogs asociados al usuario
+            Blog::where('user_id', $user->id)->delete();
+
+            // Elimina la cuenta del usuario
             $user->delete(); // Elimina la cuenta del usuario
             Auth::logout(); // Cierra la sesión del usuario
 
-            return redirect('/launchix')->with('success', 'Tu cuenta ha sido eliminada correctamente.'); // Redirige con mensaje de éxito
+            return redirect('/launchix')->with('success', 'Tu cuenta y todos tus blogs han sido eliminados correctamente.'); // Redirige con mensaje de éxito
         } catch (\Exception $e) {
             return redirect()->route('home')->with('error', 'Ocurrió un error al eliminar la cuenta: ' . $e->getMessage()); // Manejo de errores
         }
@@ -123,7 +124,6 @@ class UserController extends Controller
 
             // Actualiza la contraseña del usuario
             $user->password = Hash::make($validatedData['new_password']); // Encripta la nueva contraseña
-             /** @var \App\Models\User $user */
             $user->save(); // Guarda los cambios en la base de datos
 
             return redirect()->route('launchix')->with('success', 'Contraseña cambiada exitosamente.'); // Redirige con mensaje de éxito
@@ -132,36 +132,40 @@ class UserController extends Controller
         }
     }
 
-    // UserController.php
+    // Actualiza la foto de perfil y la foto de portada
+    public function updateProfilePicture(Request $request)
+    {
+        $user = Auth::user();
 
-public function updateProfilePicture(Request $request)
-{
-    $user = Auth::user();
+        if ($request->hasFile('profilePic')) {
+            $profilePic = $request->file('profilePic');
+            $path = $profilePic->store('profile_pics', 'public'); // Guarda la imagen en storage/app/public/profile_pics
+            $user->profile_picture = $path;
+        }
 
-    if ($request->hasFile('profilePic')) {
-        $profilePic = $request->file('profilePic');
-        $path = $profilePic->store('profile_pics', 'public'); // Guarda la imagen en storage/app/public/profile_pics
-        $user->profile_picture = $path;
+        if ($request->hasFile('coverPic')) {
+            $coverPic = $request->file('coverPic');
+            $path = $coverPic->store('cover_pics', 'public'); // Guarda la imagen en storage/app/public/cover_pics
+            $user->cover_picture = $path;
+        }
+
+        $user->save();
+
+        return redirect()->route('usuario')->with('success', 'Fotos actualizadas exitosamente.');
     }
 
-    if ($request->hasFile('coverPic')) {
-        $coverPic = $request->file('coverPic');
-        $path = $coverPic->store('cover_pics', 'public'); // Guarda la imagen en storage/app/public/cover_pics
-        $user->cover_picture = $path;
-    }
-     /** @var \App\Models\User $user */
-    $user->save();
-
-    return redirect()->route('usuario')->with('success', 'Fotos actualizadas exitosamente.');
-}
-
-
-// En tu controlador
+    // En tu controlador
     public function showUsuarioView()
     {
         $user = Auth::user(); // Obtener el usuario autenticado
         $categories = Category::all(); // Obtener todas las categorías
 
         return view('usuario', compact('user', 'categories'));
+    }
+
+    public function getUserBlogs($userId)
+    {
+        $blogs = Blog::where('user_id', $userId)->with('category')->get();
+        return view('partials.blogs', compact('blogs'));
     }
 }

@@ -66,3 +66,5 @@ Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->nam
 // Rutas coments
 Route::post('/comments/{comment}/update', [CommentController::class, 'update'])->name('comments.update');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+Route::get('/usuario/blogs/{userId}', [UserController::class, 'getUserBlogs'])->name('usuario.blogs');
