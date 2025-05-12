@@ -51,15 +51,13 @@ Route::get('/soporte-tecnico', function () {
 
 Route::put('/user-data/update', [UserController::class, 'updateUserData'])->name('user-data.update');
 
-    Route::post('/blogs', [BlogController::class, 'store'])->name('blogs.store');
+Route::post('/blogs', [BlogController::class, 'store'])->name('blogs.store');
 
-    Route::get('/usuario', [UserController::class, 'showUsuarioView'])->name('usuario');
+Route::get('/usuario', [UserController::class, 'showUsuarioView'])->name('usuario');
 
     // En routes/web.php
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
 
 
-Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
-Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
-Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
 
