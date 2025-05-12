@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -14,12 +15,13 @@ class CommentController extends Controller
             'content' => 'required|string',
         ]);
 
-        $comment = Comment::create([
+        Comment::create([
             'blog_id' => $request->blog_id,
+            'user_id' => Auth::id(), // Asegúrate de incluir el user_id
             'content' => $request->content,
         ]);
 
-        return response()->json(['message' => 'Comentario agregado correctamente', 'comment' => $comment]);
+        return redirect()->route('blogs.index')->with('success', 'Comentario agregado correctamente');
     }
 
     public function update(Request $request, Comment $comment)
