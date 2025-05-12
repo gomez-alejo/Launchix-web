@@ -37,6 +37,7 @@ class UserController extends Controller
             // Actualiza los datos del perfil del usuario
             $user->username = $validatedData['username'];
             $user->description = $validatedData['userDescription'];
+            /** @var \App\Models\User $user */
             $user->save(); // Guarda los cambios en la base de datos
 
             return redirect()->route('usuario')->with('success', 'Perfil actualizado exitosamente.'); // Redirige con mensaje de éxito
@@ -74,6 +75,7 @@ class UserController extends Controller
             $user->lastName = $validatedData['lastName'];
             $user->email = $validatedData['email'];
             $user->password = Hash::make($validatedData['new_password']); // Encripta la nueva contraseña
+            /** @var \App\Models\User $user */
             $user->save(); // Guarda los cambios en la base de datos
 
             return redirect()->route('usuario')->with('success', 'Datos de usuario actualizados exitosamente.'); // Redirige con mensaje de éxito
@@ -96,6 +98,7 @@ class UserController extends Controller
             Blog::where('user_id', $user->id)->delete();
 
             // Elimina la cuenta del usuario
+            /** @var \App\Models\User $user */
             $user->delete(); // Elimina la cuenta del usuario
             Auth::logout(); // Cierra la sesión del usuario
 
@@ -124,6 +127,7 @@ class UserController extends Controller
 
             // Actualiza la contraseña del usuario
             $user->password = Hash::make($validatedData['new_password']); // Encripta la nueva contraseña
+            /** @var \App\Models\User $user */
             $user->save(); // Guarda los cambios en la base de datos
 
             return redirect()->route('launchix')->with('success', 'Contraseña cambiada exitosamente.'); // Redirige con mensaje de éxito
@@ -148,7 +152,7 @@ class UserController extends Controller
             $path = $coverPic->store('cover_pics', 'public'); // Guarda la imagen en storage/app/public/cover_pics
             $user->cover_picture = $path;
         }
-
+        /** @var \App\Models\User $user */
         $user->save();
 
         return redirect()->route('usuario')->with('success', 'Fotos actualizadas exitosamente.');
