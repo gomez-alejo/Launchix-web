@@ -59,5 +59,10 @@ Route::get('/usuario', [UserController::class, 'showUsuarioView'])->name('usuari
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
 
 
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
-
+// Rutas coments
+Route::post('/comments/{comment}/update', [CommentController::class, 'update'])->name('comments.update');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');

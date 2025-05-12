@@ -10,8 +10,8 @@
     .card {
         margin-bottom: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        height: 350px; /* Altura fija para las tarjetas */
-        overflow: hidden; /* Oculta el contenido que se desborde */
+        height: 350px;
+        overflow: hidden;
     }
     .search-container {
         margin-bottom: 20px;
@@ -26,7 +26,7 @@
     }
     .rating > label {
         display: inline-block;
-        font-size: 20px;
+        font-size: 20px; 
         color: #ccc;
         cursor: pointer;
     }
@@ -56,25 +56,25 @@
         font-size: 1.25rem;
         margin-bottom: 0.75rem;
         display: -webkit-box;
-        -webkit-line-clamp: 2; /* Limita el título a 2 líneas */
+        -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
     }
     .card-text {
         display: -webkit-box;
-        -webkit-line-clamp: 3; /* Limita el contenido a 3 líneas */
+        -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
     }
     .modal-title {
-        word-wrap: break-word; /* Permite que el texto del título salte de línea si es demasiado largo */
-        white-space: normal; /* Permite que el texto se ajuste automáticamente */
+        word-wrap: break-word;
+        white-space: normal;
     }
     .modal-body p {
-        word-wrap: break-word; /* Permite que el texto del contenido salte de línea si es demasiado largo */
-        white-space: normal; /* Permite que el texto se ajuste automáticamente */
+        word-wrap: break-word;
+        white-space: normal;
     }
     .like-button i, .btn-link i {
         margin-right: 5px;
@@ -111,7 +111,6 @@
                 </div>
             </div>
             <div class="row blog-container" id="blogContainer">
-                <!-- Los blogs se cargarán aquí -->
                 @foreach($blogs as $blog)
                     <div class="col-md-4">
                         <div class="card">
@@ -179,21 +178,17 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="comments-list">
-                                        <!-- Aquí se cargarán los comentarios -->
                                         @foreach($blog->comments as $comment)
                                             <div class="comment">
                                                 <p>{{ $comment->content }}</p>
                                                 <div class="d-flex justify-content-end">
-                                                    <button class="btn btn-sm btn-primary edit-comment" data-comment-id="{{ $comment->id }}" data-comment-content="{{ $comment->content }}">
-                                                        <i class="fas fa-edit"></i> Editar
+                                                    <button onclick="editComment({{ $comment->id }}, '{{ $comment->content }}')" class="btn btn-sm btn-primary edit-comment">
+                                                     <i class="fas fa-edit"></i> Editar
+                                                       </button>
                                                     </button>
-                                                    <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" style="display: inline;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger delete-comment">
-                                                            <i class="fas fa-trash-alt"></i> Eliminar
-                                                        </button>
-                                                    </form>
+                                                    <button onclick="deleteComment({{ $comment->id }})" class="btn btn-sm btn-danger delete-comment">
+                                                        <i class="fas fa-trash-alt"></i> Eliminar
+                                                    </button>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -218,10 +213,48 @@
         </div>
     </div>
 </div>
-@endsection
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
+    
+    function editComment(commentId, commentContent) {
+    let newContent = prompt("Edita tu comentario:", commentContent);
+    if (newContent !== null) {
+        fetch(/comments/${commentId}/update, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ content: newContent })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            location.reload();
+        })
+        .catch(error => console.error('Error:', error));
+    }
+}
+
+
+    function deleteComment(commentId) {
+        if (confirm("¿Estás seguro de que deseas eliminar este comentario?")) {
+            fetch(/comments/${commentId}, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    }
+
     $(document).ready(function() {
         // Función para filtrar blogs por categoría
         $('.btn-group .btn').on('click', function() {
@@ -250,7 +283,12 @@
             });
         });
 
-
-
-
+        // Función para manejar los "me gusta"
+        $('.like-button').on('click', function() {
+            const blogId = $(this).data('blog-id');
+            $(this).toggleClass('liked');
+            alert('Me gusta en el blog: ' + blogId);
+        });
+    });
 </script>
+@endsection
