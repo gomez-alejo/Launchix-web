@@ -12,10 +12,13 @@ use App\Models\Category;
 class UserController extends Controller
 {
     // Muestra el perfil del usuario autenticado
-    public function showProfile()
+ public function showProfile()
     {
         $user = Auth::user(); // Obtiene el usuario autenticado
-        return view('usuario', compact('user')); // Retorna la vista 'usuario' con los datos del usuario
+        $blogs = Blog::where('user_id', $user->id)->with('comments')->get(); // Obtiene los blogs del usuario con sus comentarios
+        $categories = Category::all(); // Obtiene todas las categorías
+
+        return view('usuario', compact('user', 'blogs', 'categories')); // Retorna la vista 'usuario' con los datos del usuario, blogs y categorías
     }
 
     // Actualiza el perfil del usuario
