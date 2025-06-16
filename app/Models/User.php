@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * App\Models\User
@@ -17,7 +18,8 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use Notifiable;
-
+    use HasFactory;
+    protected $table = 'users';
     protected $fillable = [
         'firstName',
         'lastName',
@@ -32,7 +34,7 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-       public function blogs()
+    public function blogs()
 {
     return $this->hasMany(Blog::class);
 }

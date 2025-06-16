@@ -19,6 +19,8 @@ class BlogController extends Controller
 
         // Retorna la vista de blogs con los datos de los blogs
         return view('blogs', compact('blogs'));
+
+        
     }
 
     /**
