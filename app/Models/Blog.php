@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Blog extends Model
 {
+    use HasFactory;
+
+    protected $allowFilter = ['id','title', 'content', 'image_pach'];
     /**
      * The attributes that are mass assignable.
      *
@@ -52,5 +57,35 @@ class Blog extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function scopeIncluded($query)
+    {
+        $allowedIncludes = ['category', 'user','comments'];
+
+
+        if (request()->has('include')) {
+            $includes = explode(',', request('include'));
+            $includes = array_intersect($includes, $allowedIncludes);
+            $query->with($includes);
+        }
+
+        return $query;
+    }
+
+   public function scopeFilter($query)
+{
+    if (empty($this->allowFilter) || !request()->has('filter')) {
+        return $query;
+    }
+
+    $filters = request('filter');
+
+    foreach ($filters as $filter => $value) {
+        if (in_array($filter, $this->allowFilter)) {
+            $query->where($filter, 'LIKE', '%' . $value . '%');
+        }
+    }
+
+    return $query;
+}
 
 }
