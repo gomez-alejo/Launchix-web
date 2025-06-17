@@ -2,16 +2,15 @@
 
 namespace Database\Seeders;
 
-use App\Models\Comment;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB; // Asegúrate de que esta línea esté presente
 
 class CommentSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-
-        Comment::factory()->count(17)->create();
-        
-  
-  }
+        DB::table('comments')->insert([
+           ['blog_id' => 1, 'content' => 'Hola, muy buen blog', 'user_id' => 1],  
+        ]);
+    }
 }

@@ -19,7 +19,7 @@ class ApiController extends Controller
             'status' => 'success',
         ];
         return response()->json($data, 200);
-    }
+    }   
 
     
 
