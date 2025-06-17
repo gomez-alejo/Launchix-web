@@ -21,6 +21,8 @@ class ApiController extends Controller
         return response()->json($data, 200);
     }
 
+    
+
     /**
      * Show the form for creating a new resource.
      */

@@ -6,4 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/users',[ApiController::class, 'index'])->name('api.users.index');
 
+Route::resource('/categories',categoryController::class);
+
+
 
