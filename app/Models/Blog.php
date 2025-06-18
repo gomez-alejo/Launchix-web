@@ -69,7 +69,7 @@ class Blog extends Model
 
     public function scopeIncluded($query)
     {
-        $allowedIncludes = ['category', 'user','comments','tag'];
+        $allowedIncludes = ['category', 'user','comments','tags'];
 
 
         if (request()->has('include')) {
