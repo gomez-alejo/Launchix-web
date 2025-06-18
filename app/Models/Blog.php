@@ -57,9 +57,19 @@ class Blog extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function tags()
+    {
+       return $this->belongsToMany(Tag::class, 'blog_tag', 'blog_id', 'tag_id');
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
     public function scopeIncluded($query)
     {
-        $allowedIncludes = ['category', 'user','comments'];
+        $allowedIncludes = ['category', 'user','comments','tag'];
 
 
         if (request()->has('include')) {
