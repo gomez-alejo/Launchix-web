@@ -11,6 +11,38 @@ use App\Models\Category;
 
 class UserController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        // Iniciar una consulta base para el modelo Area
+        // $users = User::included()->get();
+        $users=User::included()->filter()->get();
+        return response()->json($users);
+    }
+
+    public function store(Request $request)
+    {
+        // Validar los datos de entrada
+        $request->validate([
+            'firstName' => 'required|max:255',
+            'lastName'=> 'required|max:255',
+            'username'=> 'required|max:255',
+            'email' => 'required|max:255',
+            'password' => 'required|max:255',
+            'description' => 'required|max:255',
+        ]);
+
+        $user = User::create($request->all());
+        return response()->json($user);
+    }
+
+    public function show(Request $request, $id)
+    {
+        // Iniciar una consulta base para el modelo Area
+         $user = User::included()->findOrFail($id);
+        return response()->json($user);
+    }
+    
     // Muestra el perfil del usuario autenticado
     public function showProfile()
     {

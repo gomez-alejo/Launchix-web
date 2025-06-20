@@ -13,12 +13,12 @@ class ApiController extends Controller
      */
     public function index()
     {
-        $user = User::all();
-        $data = [
-            'users' => $user,
-            'status' => 'success',
-        ];
-        return response()->json($data, 200);
+        // $user = User::all();
+        // $data = [
+        //     'users' => $user,
+        //     'status' => 'success',
+        // ];
+        // return response()->json($data, 200);
     }
 
     /**
