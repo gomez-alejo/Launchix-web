@@ -7,57 +7,53 @@ use Illuminate\Http\Request;
 
 class LikeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        //
+        // Iniciar una consulta base para el modelo Area
+        // $likes = Like::included()->get();
+        $likes = Like::included()->filter()->get();
+        return response()->json($likes);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+  
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
-        //
+        // Validar los datos de entrada
+        $request->validate([
+            'blog_id' => 'required|exists:blogs,id',
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $like = Like::create($request->all());
+        return response()->json($like);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Like $like)
+
+    public function show(Request $request, $id)
     {
-        //
+        // Iniciar una consulta base para el modelo Area
+         $like = Like::included()->findOrFail($id);
+        return response()->json($like);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Like $like)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, Like $like)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    
     public function destroy(Like $like)
     {
         //

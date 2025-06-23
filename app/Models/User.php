@@ -29,7 +29,15 @@ class User extends Authenticatable
         'password',
         'description',
     ];
-    protected $allowFilter = [ 'id','firstName','lastName','username', 'email','password','description',];
+    protected $allowFilter = [ 
+        'id',
+        'firstName',
+        'lastName',
+        'username', 
+        'email',
+        'password',
+        'description',
+    ];
 
     protected $hidden = [
         'password',
@@ -37,13 +45,22 @@ class User extends Authenticatable
     ];
 
     public function blogs()
-{
-    return $this->hasMany(Blog::class);
-}
-
-   public function scopeIncluded($query)
     {
-        $allowedIncludes = ['blogs'];
+    return $this->hasMany(Blog::class);
+    }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    public function scopeIncluded($query)
+    {
+        $allowedIncludes = ['blogs', 'comments', 'likes'];
 
         if (request()->has('include')) {
             $includes = explode(',', request('include'));
@@ -76,4 +93,5 @@ class User extends Authenticatable
 
 
     }
+
 }
