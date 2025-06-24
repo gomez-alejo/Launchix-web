@@ -26,4 +26,7 @@ Route::resource('comments',CommentController::class);
 Route::resource('tags',TagController::class);
 Route::resource('likes',LikeController::class);
 
+Route::resource('/categories',categoryController::class);
+
+
 
