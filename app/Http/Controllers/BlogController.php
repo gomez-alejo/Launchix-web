@@ -14,11 +14,15 @@ class BlogController extends Controller
      */
     public function index()
     {
-        // Obtiene todos los blogs desde la base de datos, cargando los comentarios asociados
-        $blogs = Blog::with('comments')->get();
+        // Obtiene todos los blogs desde la base de datos, cargando los comentarios asociad
 
-        // Retorna la vista de blogs con los datos de los blogs
-        return view('blogs', compact('blogs'));
+        // Iniciar una consulta base para el modelo Area
+        // $blogs = Blog::included()->get();
+        // return response()->json($blogs);
+        
+        $blogs = Blog::included()->filter()->get();
+        return response()->json($blogs);
+        
     }
 
     /**
@@ -33,8 +37,9 @@ class BlogController extends Controller
         $request->validate([
             'title' => 'required|string|max:255', // Título es obligatorio, debe ser una cadena y máximo 255 caracteres
             'content' => 'required|string', // Contenido es obligatorio y debe ser una cadena
-            'category_id' => 'required|exists:categories,id', // ID de categoría es obligatorio y debe existir en la tabla categories
             'image_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Ruta de la imagen es opcional, debe ser una imagen de tipo jpeg, png, jpg, gif y máximo 2048 KB
+            'category_id' => 'required|exists:categories,id', // ID de categoría es obligatorio y debe existir en la tabla categories
+            'user_id' => 'required|exists:users,id', // ID de categoría es obligatorio y debe existir en la tabla categories
         ]);
 
         // Obtiene todos los datos del formulario
@@ -53,5 +58,33 @@ class BlogController extends Controller
 
         // Redirige a la lista de blogs con un mensaje de éxito
         return redirect()->route('blogs.index')->with('success', 'Blog publicado con éxito');
+
+        // Validar los datos de entrada
+        
+
+        $blogs = Blog::create($request->all());
+        return response()->json($blogs);
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+     public function show(Request $request, $id)
+    {
+        // Iniciar una consulta base para el modelo Apprentice
+         $blogs = Blog::included()->findOrFail($id);
+        return response()->json($blogs);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    
 }

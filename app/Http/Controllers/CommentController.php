@@ -8,11 +8,21 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        // Iniciar una consulta base para el modelo Area
+        // $comments = Comment::included()->get();
+        $comments=Comment::included()->filter()->get();
+        return response()->json($comments);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
-            'blog_id' => 'required|exists:blogs,id',
             'content' => 'required|string',
+            'blog_id' => 'required|exists:blogs,id',
+            'user_id' => 'required|exists:users,id',
         ]);
 
         Comment::create([
@@ -22,6 +32,16 @@ class CommentController extends Controller
         ]);
 
         return redirect()->route('blogs.index')->with('success', 'Comentario agregado correctamente');
+
+        $comment = Comment::create($request->all());
+        return response()->json($comment);
+    }
+
+    public function show(Request $request, $id)
+    {
+        // Iniciar una consulta base para el modelo Area
+         $comment = Comment::included()->findOrFail($id);
+        return response()->json($comment);
     }
 
     public function update(Request $request, Comment $comment)
