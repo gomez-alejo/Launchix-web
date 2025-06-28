@@ -172,4 +172,13 @@ class UserController extends Controller
         $blogs = Blog::where('user_id', $userId)->with('category')->get();
         return view('partials.blogs', compact('blogs'));
     }
+
+    public function index(){
+        $user = User::all();
+        $data = [
+            'users' => $user,
+            'status' => 'success',
+        ];
+        return response()->json($data, 200);
+    }
 }

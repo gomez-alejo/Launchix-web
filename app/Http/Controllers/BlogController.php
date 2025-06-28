@@ -19,8 +19,6 @@ class BlogController extends Controller
 
         // Retorna la vista de blogs con los datos de los blogs
         return view('blogs', compact('blogs'));
-
-        
     }
 
     /**
@@ -55,5 +53,14 @@ class BlogController extends Controller
 
         // Redirige a la lista de blogs con un mensaje de éxito
         return redirect()->route('blogs.index')->with('success', 'Blog publicado con éxito');
+    }
+
+    public function indexApi(){
+        $blog = Blog::all();
+        $data = [
+            'users' => $blog,
+            'status' => 'success',
+        ];
+        return response()->json($blog, 200);
     }
 }

@@ -43,4 +43,15 @@ class CommentController extends Controller
 
         return response()->json(['message' => 'Comentario eliminado correctamente']);
     }
+
+    public function indexApi()
+    {
+        $comment = Comment::all();
+        
+        $data = [
+            'comments' => $comment,
+            'status' => 200 
+            ];
+        return response()->json($comment,200);
+    }
 }
