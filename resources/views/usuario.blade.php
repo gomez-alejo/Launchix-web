@@ -4,7 +4,6 @@
 
 @section('content')
     @vite(['resources/css/usuario.css'])
-    <h1>hola manzano</h1>
     <!-- Contenido principal de la página -->
     <div class="container mt-5 pt-5 my-5">
         <div class="row">
