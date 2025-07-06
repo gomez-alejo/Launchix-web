@@ -8,6 +8,8 @@
     <meta name="keywords" content="Launchix, emprendimiento, Timbío, plataforma, oportunidades">
     <title>@yield('title', 'Launchix - Plataforma de Oportunidades')</title>
     @include('include.links')
+
+
     <!-- Custom CSS -->
 <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     
@@ -21,6 +23,7 @@
 
     @include('include.footer')
     @include('include.scripts')
+
 </body>
 </html>
 

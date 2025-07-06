@@ -48,6 +48,9 @@ Route::get('/soporte-tecnico', function () {
 })->name('soporte-tecnico');
 
 
+//Route::get('/usuario', [UserController::class, 'showUsuarioView'])->name('usuario');
+
+
 
 Route::put('/user-data/update', [UserController::class, 'updateUserData'])->name('user-data.update');
 
@@ -67,5 +70,7 @@ Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->nam
 Route::post('/comments/{comment}/update', [CommentController::class, 'update'])->name('comments.update');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
-Route::get('/usuario/blogs/{userId}', [UserController::class, 'getUserBlogs'])->name('usuario.blogs');
+// Route::get('/usuario/blogs/{userId}', [UserController::class, 'getUserBlogs'])->name('usuario.blogs');
 
+Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
+Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
