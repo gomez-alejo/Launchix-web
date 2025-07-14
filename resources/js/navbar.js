@@ -26,3 +26,40 @@ function confirmarEliminarCuenta(event) {
         form.submit();
     }
 }
+// Función para cargar notificaciones
+function cargarNotificaciones() {
+    fetch('/notificaciones', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const notificationCount = document.getElementById('notificationCount');
+        const notificationMenu = document.getElementById('notificationMenu');
+
+        if (notificationCount && notificationMenu) {
+            notificationCount.textContent = data.unreadCount;
+            notificationMenu.innerHTML = '';
+
+            data.notificaciones.forEach(notificacion => {
+                const notificationItem = document.createElement('a');
+                notificationItem.className = 'dropdown-item';
+                notificationItem.href = notificacion.url;
+                notificationItem.textContent = notificacion.message;
+                notificationMenu.appendChild(notificationItem);
+            });
+        }
+    })
+    .catch(error => console.error('Error al cargar las notificaciones:', error));
+}
+
+// Cargar notificaciones al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    cargarNotificaciones();
+    // Actualizar notificaciones cada 30 segundos
+    setInterval(cargarNotificaciones, 30000);
+});

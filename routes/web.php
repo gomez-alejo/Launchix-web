@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CommentController;
-
+use App\Http\Controllers\NotificationController;
 
 // Ruta para la página principal
 Route::get('/launchix', function () {
@@ -40,6 +40,10 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
     Route::put('/update-account-info', [UserController::class, 'updateAccountInfo'])->name('update-account-info');
     Route::delete('/eliminar-cuenta', [UserController::class, 'eliminarCuenta'])->name('eliminar-cuenta');
+
+       // Rutas para las notificaciones
+    Route::get('/notificaciones', [NotificationController::class, 'getNotificaciones'])->name('notificaciones');
+    Route::post('/notificaciones/{id}/read', [NotificationController::class, 'markAsRead'])->name('notificaciones.read');
 });
 
 // Ruta para soporte técnico

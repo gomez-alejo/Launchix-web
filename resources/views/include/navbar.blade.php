@@ -22,6 +22,15 @@
                 <!-- Enlaces de navegación para el usuario -->
                 <ul class="navbar-nav">
                     @if(Auth::check())
+                    <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bell"></i>
+                                <span class="badge badge-danger" id="notificationCount">0</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationDropdown" id="notificationMenu">
+                                <!-- Las notificaciones se cargarán aquí -->
+                            </div>
+                        </li>
                         <!-- Menú desplegable para el perfil del usuario -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -119,4 +128,48 @@
             form.submit();
         }
     }
+    // Función para cargar notificaciones
+    function cargarNotificaciones() {
+        fetch('/notificaciones', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })      
+        .then(response => response.json())
+        .then(data => {
+            const notificationCount = document.getElementById('notificationCount');
+            const notificationMenu = document.getElementById('notificationMenu');
+
+            notificationCount.textContent = data.unreadCount;
+            notificationMenu.innerHTML = '';
+
+            if (data.notificaciones.length === 0) {
+                // Si no hay notificaciones, mostrar mensaje
+                const emptyMsg = document.createElement('div');
+                emptyMsg.className = 'dropdown-item text-center text-muted';
+                emptyMsg.textContent = 'No tienes notificaciones por el momento';
+                notificationMenu.appendChild(emptyMsg);
+            } else {
+                data.notificaciones.forEach(notificacion => {
+                    const notificationItem = document.createElement('a');
+                    notificationItem.className = 'dropdown-item';
+                    notificationItem.href = notificacion.url;
+                    notificationItem.textContent = notificacion.message;
+                    notificationMenu.appendChild(notificationItem);
+                });
+            }
+        })
+        .catch(error => console.error('Error al cargar las notificaciones:', error));
+    }
+
+    // Cargar notificaciones al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        cargarNotificaciones();
+
+        // Actualizar notificaciones cada 30 segundos
+        setInterval(cargarNotificaciones, 30000);
+    });
 </script>
