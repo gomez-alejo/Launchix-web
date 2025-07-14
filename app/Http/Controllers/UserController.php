@@ -120,38 +120,47 @@ class UserController extends Controller
     }
 
     // Elimina la cuenta del usuario
-    public function eliminarCuenta(Request $request)
-    {
-        $user = Auth::user(); // Obtiene el usuario autenticado
+        public function eliminarCuenta(Request $request)
+{
+    $user = Auth::user();
 
-        if (!$user) {
-            return redirect()->route('login')->with('error', 'Usuario no autenticado.'); // Redirige si el usuario no está autenticado
-        }
-
-        try {
-            // Elimina todos los blogs asociados al usuario
-            Blog::where('user_id', $user->id)->delete();
-
-            // Elimina la cuenta del usuario
-            /** @var \App\Models\User $user */
-            $user->delete(); // Elimina la cuenta del usuario
-            Auth::logout(); // Cierra la sesión del usuario
-
-            return redirect('/launchix')->with('success', 'Tu cuenta y todos tus blogs han sido eliminados correctamente.'); // Redirige con mensaje de éxito
-        } catch (\Exception $e) {
-            return redirect()->route('home')->with('error', 'Ocurrió un error al eliminar la cuenta: ' . $e->getMessage()); // Manejo de errores
-        }
+    // Verificar que $user es una instancia del modelo User
+    if (!$user instanceof \App\Models\User) {
+        throw new \Exception('El usuario no es una instancia válida del modelo User.');
     }
 
-    // Cambia la contraseña del usuario
-    public function changePassword(Request $request)
-    {
-        $user = Auth::user(); // Obtiene el usuario autenticado
+    if (!$user) {
+        return redirect()->route('login')->with('error', 'Usuario no autenticado.');
+    }
 
-        // Valida los datos de entrada para el cambio de contraseña
-        $validatedData = $request->validate([
-            'current_password' => 'required',
-            'new_password' => 'required|string|min:8|confirmed',
+    try {
+        // Elimina todos los comentarios asociados a los blogs del usuario
+        $blogs = $user->blogs;
+        foreach ($blogs as $blog) {
+            $blog->comments()->delete();
+            $blog->delete();
+        }
+
+        // Elimina la cuenta del usuario
+        $user->delete();
+
+        Auth::logout();
+        return redirect('/launchix')->with('success', 'Tu cuenta y todos tus blogs han sido eliminados correctamente.');
+    } catch (\Exception $e) {
+        return redirect()->route('home')->with('error', 'Ocurrió un error al eliminar la cuenta: ' . $e->getMessage());
+    }
+}
+
+
+        // Cambia la contraseña del usuario
+        public function changePassword(Request $request)
+        {
+            $user = Auth::user(); // Obtiene el usuario autenticado
+
+            // Valida los datos de entrada para el cambio de contraseña
+            $validatedData = $request->validate([
+                'current_password' => 'required',
+                'new_password' => 'required|string|min:8|confirmed',
         ]);
 
         try {
