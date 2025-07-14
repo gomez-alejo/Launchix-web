@@ -19,7 +19,9 @@ class ApiController extends Controller
             'status' => 'success',
         ];
         return response()->json($data, 200);
-    }
+    }   
+
+    
 
     /**
      * Show the form for creating a new resource.

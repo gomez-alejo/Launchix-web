@@ -6,6 +6,9 @@ namespace Database\Seeders;
 
 use App\Models\Blog;
 use Illuminate\Database\Seeder;
+use illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,3 +26,4 @@ class DatabaseSeeder extends Seeder
         
     }
 }
+ 
