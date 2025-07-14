@@ -29,15 +29,7 @@ class User extends Authenticatable
         'password',
         'description',
     ];
-    protected $allowFilter = [ 
-        'id',
-        'firstName',
-        'lastName',
-        'username', 
-        'email',
-        'password',
-        'description',
-    ];
+   
     protected $allowFilter = [ 
         'id',
         'firstName',
