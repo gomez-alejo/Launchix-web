@@ -11,17 +11,24 @@
             <div class="col-md-12">
                 <!-- Contenedor para la foto de portada y perfil -->
                 <div class="cover-pic-container">
-                    <!-- Foto de portada -->
-                    <img id="coverPic" src="https://via.placeholder.com/750x300" alt="Foto de portada" class="img-fluid">
-                    <input type="file" id="coverPicInput" class="d-none">
-                    <!-- Icono de cámara para cambiar la foto de portada -->
+                    <!-- Foto de portada: muestra la imagen guardada o un placeholder -->
+                    <img id="coverPic" src="{{ $user->cover_picture ? asset('storage/' . $user->cover_picture) : 'https://via.placeholder.com/750x300' }}" alt="Foto de portada" class="img-fluid">
+                    <!-- Formulario oculto para subir la foto de portada -->
+                    <form id="coverPicForm" action="{{ route('profile.picture.update') }}" method="POST" enctype="multipart/form-data" style="display:none;">
+                        @csrf
+                        <input type="file" id="coverPicInput" name="coverPic" accept="image/*">
+                    </form>
+                    <!-- Icono de cámara para seleccionar la foto de portada -->
                     <div class="camera-icon" id="coverCameraIcon"><i class="fas fa-camera"></i></div>
-                    <!-- Contenedor para la foto de perfil -->
                     <div class="profile-pic-container">
-                        <!-- Foto de perfil -->
-                        <img id="profilePic" src="https://via.placeholder.com/150" alt="Foto de perfil" class="img-fluid rounded-circle">
-                        <input type="file" id="profilePicInput" class="d-none">
-                        <!-- Icono de cámara para cambiar la foto de perfil -->
+                        <!-- Foto de perfil: muestra la imagen guardada o un placeholder -->
+                        <img id="profilePic" src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://via.placeholder.com/150' }}" alt="Foto de perfil" class="img-fluid rounded-circle">
+                        <!-- Formulario oculto para subir la foto de perfil -->
+                        <form id="profilePicForm" action="{{ route('profile.picture.update') }}" method="POST" enctype="multipart/form-data" style="display:none;">
+                            @csrf
+                            <input type="file" id="profilePicInput" name="profilePic" accept="image/*">
+                        </form>
+                        <!-- Icono de cámara para seleccionar la foto de perfil -->
                         <div class="camera-icon" id="profileCameraIcon"><i class="fas fa-camera"></i></div>
                     </div>
                 </div>

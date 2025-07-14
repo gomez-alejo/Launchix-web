@@ -72,4 +72,5 @@ Route::post('/comments/{comment}/update', [CommentController::class, 'update'])-
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
 Route::get('/usuario/blogs/{userId}', [UserController::class, 'getUserBlogs'])->name('usuario.blogs');
+Route::post('/profile/picture', [UserController::class, 'updateProfilePicture'])->name('profile.picture.update');
 

@@ -145,25 +145,30 @@ class UserController extends Controller
         }
     }
 
-    // Actualiza la foto de perfil y la foto de portada
+    // Actualiza la foto de perfil y la foto de portada del usuario
     public function updateProfilePicture(Request $request)
     {
-        $user = Auth::user();
+        $user = Auth::user(); // Obtiene el usuario autenticado
 
+        // Si se subió una nueva foto de perfil
         if ($request->hasFile('profilePic')) {
             $profilePic = $request->file('profilePic');
-            $path = $profilePic->store('profile_pics', 'public'); // Guarda la imagen en storage/app/public/profile_pics
+            // Guarda la imagen en storage/app/public/profile_pics y almacena la ruta
+            $path = $profilePic->store('profile_pics', 'public');
             $user->profile_picture = $path;
         }
 
+        // Si se subió una nueva foto de portada
         if ($request->hasFile('coverPic')) {
             $coverPic = $request->file('coverPic');
-            $path = $coverPic->store('cover_pics', 'public'); // Guarda la imagen en storage/app/public/cover_pics
+            // Guarda la imagen en storage/app/public/cover_pics y almacena la ruta
+            $path = $coverPic->store('cover_pics', 'public');
             $user->cover_picture = $path;
         }
         /** @var \App\Models\User $user */
-        $user->save();
+        $user->save(); // Guarda los cambios en la base de datos
 
+        // Redirige al perfil con mensaje de éxito
         return redirect()->route('usuario')->with('success', 'Fotos actualizadas exitosamente.');
     }
 

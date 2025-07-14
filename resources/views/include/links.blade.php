@@ -9,4 +9,5 @@
 {{-- include/links.blade.php --}}
 @vite([
     'resources/css/style.css',
+    'resources/js/usuario.js', // Asegura que el JS de usuario se cargue en todas las vistas
 ])

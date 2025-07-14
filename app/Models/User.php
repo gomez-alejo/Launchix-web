@@ -27,6 +27,8 @@ class User extends Authenticatable
         'email',
         'password',
         'description',
+        'profile_picture', // Ruta de la foto de perfil
+        'cover_picture',   // Ruta de la foto de portada
     ];
 
     protected $hidden = [
@@ -53,6 +55,7 @@ class User extends Authenticatable
     // Relación con notificaciones personalizadas
     public function notifications()
     {
+        // Un usuario puede tener muchas notificaciones
         return $this->hasMany(Notification::class);
     }
 }
