@@ -11,11 +11,7 @@ class Blog extends Model
     use HasFactory;
 
     protected $allowFilter = ['id','title', 'content', 'image_pach'];
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+
     protected $fillable = [
         'title',        // Título del blog
         'content',      // Contenido del blog
@@ -25,33 +21,17 @@ class Blog extends Model
         // otros campos que desees permitir para asignación masiva
     ];
 
-    /**
-     * Define la relación con el modelo Category.
-     * Un blog pertenece a una categoría.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    /**
-     * Define la relación con el modelo User.
-     * Un blog pertenece a un usuario.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-        /**
-     * Define la relación con el modelo Comment.
-     * Un blog puede tener muchos comentarios.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
@@ -69,7 +49,7 @@ class Blog extends Model
 
     public function scopeIncluded($query)
     {
-        $allowedIncludes = ['category', 'user','comments','tags'];
+        $allowedIncludes = ['category', 'user','comments','tags', 'likes'];
 
 
         if (request()->has('include')) {
@@ -82,20 +62,20 @@ class Blog extends Model
     }
 
    public function scopeFilter($query)
-{
-    if (empty($this->allowFilter) || !request()->has('filter')) {
+    {
+        if (empty($this->allowFilter) || !request()->has('filter')) {
         return $query;
-    }
+        }
 
-    $filters = request('filter');
+        $filters = request('filter');
 
     foreach ($filters as $filter => $value) {
         if (in_array($filter, $this->allowFilter)) {
             $query->where($filter, 'LIKE', '%' . $value . '%');
+            }
         }
-    }
 
-    return $query;
-}
+        return $query;
+    }
 
 }

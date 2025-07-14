@@ -3,7 +3,7 @@
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
         <div class="container-fluid">
             <!-- Logo y nombre de la marca -->
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{{ url('/launchix') }}">
                 <i class="fas fa-store"></i> Launchix
             </a>
             <!-- Botón para alternar la navegación en dispositivos móviles -->

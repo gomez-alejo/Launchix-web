@@ -31,35 +31,5 @@ class BlogTagController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Blog_tag $blog_tag)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Blog_tag $blog_tag)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Blog_tag $blog_tag)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Blog_tag $blog_tag)
-    {
-        //
-    }
+  
 }

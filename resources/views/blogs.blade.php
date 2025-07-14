@@ -4,18 +4,23 @@
 
 @section('content')
 <style>
+    /* Estilos para el contenedor de blogs */
     .blog-container {
         margin-top: 30px;
     }
+    /* Estilos para las tarjetas de blogs */
     .card {
         margin-bottom: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        height: 350px;
-        overflow: hidden;
+        height: 600px; /* Altura fija para las tarjetas */
+        display: flex;
+        flex-direction: column;
     }
+    /* Estilos para el contenedor de búsqueda */
     .search-container {
         margin-bottom: 20px;
     }
+    /* Estilos para el sistema de calificación */
     .rating {
         display: inline-block;
         unicode-bidi: bidi-override;
@@ -38,20 +43,20 @@
     .rating > label:hover ~ label {
         color: #ffc107;
     }
+    /* Estilos para la sección de comentarios */
     .comment-section {
         margin-top: 20px;
     }
-    .card-img-top {
-        height: 200px;
-        object-fit: cover;
-    }
+    /* Estilos para la lista de comentarios */
     .comments-list {
         margin-top: 20px;
     }
+    /* Estilos para cada comentario */
     .comment {
         border-bottom: 1px solid #eee;
         padding: 10px 0;
     }
+    /* Estilos para el título de la tarjeta */
     .card-title {
         font-size: 1.25rem;
         margin-bottom: 0.75rem;
@@ -61,6 +66,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+    /* Estilos para el texto de la tarjeta */
     .card-text {
         display: -webkit-box;
         -webkit-line-clamp: 3;
@@ -68,14 +74,17 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+    /* Estilos para el título del modal */
     .modal-title {
         word-wrap: break-word;
         white-space: normal;
     }
+    /* Estilos para el cuerpo del modal */
     .modal-body p {
         word-wrap: break-word;
         white-space: normal;
     }
+    /* Estilos para el botón de "me gusta" */
     .like-button i, .btn-link i {
         margin-right: 5px;
     }
@@ -86,21 +95,39 @@
     .like-button.liked {
         color: #ff0000;
     }
+    /* Estilos para los botones de editar y eliminar comentarios */
     .edit-comment, .delete-comment {
         margin-left: 10px;
     }
     .edit-comment i, .delete-comment i {
         margin-right: 5px;
     }
+    /* Estilos para el contenedor de la imagen */
+    .card-img-container {
+        height: 250px; /* Aumentar la altura del contenedor de la imagen */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+    .card-img-container img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
 </style>
+
+{{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <div class="container mt-5 pt-5 my-5">
     <div class="row justify-content-center">
         <div class="col-md-12">
+            <!-- Contenedor de búsqueda -->
             <div class="search-container">
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="Buscar blogs..." id="searchInput">
                 </div>
+                <!-- Botones de categoría -->
                 <div class="btn-group" role="group" aria-label="Categorías">
                     <button type="button" class="btn btn-outline-primary" data-category="all">Todas</button>
                     <button type="button" class="btn btn-outline-primary" data-category="experiencia">Experiencia</button>
@@ -110,26 +137,99 @@
                     <button type="button" class="btn btn-outline-primary" data-category="cultura">Cultura</button>
                 </div>
             </div>
+            <!-- Contenedor de blogs -->
             <div class="row blog-container" id="blogContainer">
                 @foreach($blogs as $blog)
                     <div class="col-md-4">
                         <div class="card">
+                            <div class="card-header d-flex justify-content-end">
+                                <!-- Botón de opciones en la parte superior de la tarjeta -->
+                                <button type="button" class="btn btn-link text-dark" data-bs-toggle="modal" data-bs-target="#optionsModal{{ $blog->id }}">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        <div class="card-img-container">
                             @if($blog->image_path)
                                 <img src="{{ asset($blog->image_path) }}" class="card-img-top" alt="{{ $blog->title }}">
                             @endif
+                        </div>
                             <div class="card-body">
                                 <h5 class="card-title">{{ $blog->title }}</h5>
                                 <p class="card-text">{{ Str::limit($blog->content, 100) }}</p>
                                 <span class="badge badge-primary">{{ strtolower($blog->category->name) }}</span>
                                 <div class="d-flex justify-content-between align-items-center mt-3">
-                                    <button class="btn btn-link" data-toggle="modal" data-target="#commentsModal{{ $blog->id }}">
+                                    <button class="btn btn-link" data-bs-toggle="modal" data-bs-target="#commentsModal{{ $blog->id }}">
                                         <i class="fas fa-comment"></i> Comentarios
                                     </button>
                                     <button class="btn btn-link like-button" data-blog-id="{{ $blog->id }}">
                                         <i class="fas fa-heart"></i> Me gusta
                                     </button>
                                 </div>
-                                <button class="btn btn-primary" data-toggle="modal" data-target="#blogModal{{ $blog->id }}">Leer más</button>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#blogModal{{ $blog->id }}">Leer más</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal de Opciones -->
+                    <div class="modal fade" id="optionsModal{{ $blog->id }}" tabindex="-1" aria-labelledby="optionsModalLabel{{ $blog->id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="optionsModalLabel{{ $blog->id }}">Opciones de Blog</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Formulario de Edición -->
+                                    @if(Auth::id() == $blog->user_id)
+                                        <form id="blogForm{{ $blog->id }}" action="{{ route('blogs.update', $blog->id) }}" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="mb-3">
+                                                <label for="title" class="form-label">Título</label>
+                                                <input type="text" class="form-control" id="title" name="title" value="{{ $blog->title }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="content" class="form-label">Contenido</label>
+                                                <textarea class="form-control" id="content" name="content" required>{{ $blog->content }}</textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="image_path" class="form-label">Imagen</label>
+                                                <input type="file" class="form-control" id="image_path" name="image_path">
+                                                @if($blog->image_path)
+                                                    <img src="{{ asset($blog->image_path) }}" alt="{{ $blog->title }}" class="img-thumbnail mt-2" width="150">
+                                                @endif
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="category_id" class="form-label">Categoría</label>
+                                                <select class="form-control" id="category_id" name="category_id" required>
+                                                    <option value="">Seleccione una categoría</option>
+                                                    @foreach($categories as $category)
+                                                        <option value="{{ $category->id }}" {{ $blog->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="user_id" class="form-label">Usuario</label>
+                                                <select class="form-control" id="user_id" name="user_id" required>
+                                                    <option value="{{ $blog->user_id }}">{{ $blog->user->username }}</option>
+                                                </select>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                                        </form>
+                                    @else
+                                        <p>No tienes permiso para editar este blog.</p>
+                                    @endif
+                                </div>
+                                <div class="modal-footer">
+                                    <!-- Botón de Eliminar -->
+                                    @if(Auth::id() == $blog->user_id)
+                                        <form id="deleteForm{{ $blog->id }}" action="{{ route('blogs.destroy', $blog->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-danger" onclick="confirmDelete({{ $blog->id }})">Eliminar</button>
+                                        </form>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -140,12 +240,11 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="blogModalLabel{{ $blog->id }}">{{ $blog->title }}</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <p>{{ $blog->content }}</p>
+                                    <!-- Sistema de calificación -->
                                     <div class="rating">
                                         <input type="radio" id="star5-{{ $blog->id }}" name="rating-{{ $blog->id }}" value="5" />
                                         <label for="star5-{{ $blog->id }}">★</label>
@@ -160,7 +259,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                 </div>
                             </div>
                         </div>
@@ -172,11 +271,10 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="commentsModalLabel{{ $blog->id }}">Comentarios</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
+                                    <!-- Lista de comentarios -->
                                     <div class="comments-list">
                                        @foreach($blog->comments as $comment)
                                           <div class="comment">
@@ -186,18 +284,17 @@
                                              <!-- Verifica si el usuario autenticado es el dueño del comentario -->
                                                @if(Auth::id() === $comment->user_id)  
                                                 <div class="d-flex justify-content-end">
-                                                  <button onclick="editComment({{ $comment->id }}, '{{ $comment->content }}')" class="btn btn-sm btn-primary edit-comment">
-                                              <i class="fas fa-edit"></i> Editar
-                                          </button>
-                                         <button onclick="deleteComment({{ $comment->id }})" class="btn btn-sm btn-danger delete-comment">
-                                            <i class="fas fa-trash-alt"></i> Eliminar
-                                               </button>
-                                          </div>
-                                      @endif
-                                  </div>
-                               </div>
-                            @endforeach
-                               </div>
+                                                    <button onclick="editComment({{ $comment->id }}, '{{ $comment->content }}')" class="btn btn-sm btn-primary edit-comment">
+                                                        <i class="fas fa-edit"></i> Editar
+                                                    </button>
+                                                    <button onclick="deleteComment({{ $comment->id }})" class="btn btn-sm btn-danger delete-comment">
+                                                        <i class="fas fa-trash-alt"></i> Eliminar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <!-- Sección para añadir comentarios -->
                                     <div class="comment-section">
                                         <form action="{{ route('comments.store') }}" method="POST">
                                             @csrf
@@ -208,7 +305,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                 </div>
                             </div>
                         </div>
@@ -219,8 +316,16 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    // Función para confirmar la eliminación de un blog
+    function confirmDelete(blogId) {
+        if (confirm("¿Estás seguro de que deseas eliminar este blog?")) {
+            document.getElementById('deleteForm' + blogId).submit();
+        }
+    }
+
+    // Función para editar un comentario
     function editComment(commentId, commentContent) {
         let newContent = prompt("Edita tu comentario:", commentContent);
         if (newContent !== null) {
@@ -241,6 +346,7 @@
         }
     }
 
+    // Función para eliminar un comentario
     function deleteComment(commentId) {
         if (confirm("¿Estás seguro de que deseas eliminar este comentario?")) {
             fetch(`/comments/${commentId}`, {
@@ -258,40 +364,46 @@
         }
     }
 
-    $(document).ready(function() {
+    // Eventos al cargar el DOM
+    document.addEventListener('DOMContentLoaded', function() {
         // Función para filtrar blogs por categoría
-        $('.btn-group .btn').on('click', function() {
-            const category = $(this).data('category');
-            $('.blog-container .col-md-4').each(function() {
-                const blogCategory = $(this).find('.badge').text().toLowerCase();
-                if (category === 'all' || blogCategory === category) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
+        document.querySelectorAll('.btn-group .btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const category = this.getAttribute('data-category');
+                document.querySelectorAll('.blog-container .col-md-4').forEach(blog => {
+                    const blogCategory = blog.querySelector('.badge').textContent.toLowerCase();
+                    if (category === 'all' || blogCategory === category) {
+                        blog.style.display = 'block';
+                    } else {
+                        blog.style.display = 'none';
+                    }
+                });
             });
         });
 
         // Función para buscar blogs en tiempo real
-        $('#searchInput').on('input', function() {
-            const searchTerm = $(this).val().toLowerCase();
-            $('.blog-container .col-md-4').each(function() {
-                const title = $(this).find('.card-title').text().toLowerCase();
-                const content = $(this).find('.card-text').text().toLowerCase();
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            document.querySelectorAll('.blog-container .col-md-4').forEach(blog => {
+                const title = blog.querySelector('.card-title').textContent.toLowerCase();
+                const content = blog.querySelector('.card-text').textContent.toLowerCase();
                 if (title.includes(searchTerm) || content.includes(searchTerm)) {
-                    $(this).show();
+                    blog.style.display = 'block';
                 } else {
-                    $(this).hide();
+                    blog.style.display = 'none';
                 }
             });
         });
 
         // Función para manejar los "me gusta"
-        $('.like-button').on('click', function() {
-            const blogId = $(this).data('blog-id');
-            $(this).toggleClass('liked');
-            alert('Me gusta en el blog: ' + blogId);
+        document.querySelectorAll('.like-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const blogId = this.getAttribute('data-blog-id');
+                this.classList.toggle('liked');
+                alert('Me gusta en el blog: ' + blogId);
+            });
         });
     });
 </script>
+
 @endsection

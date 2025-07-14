@@ -169,17 +169,7 @@
                 </div>
             </div>
             <!-- Repetir para otros miembros del equipo -->
-            <div class="col-md-4 mb-4" data-aos="fade-up">
-                <div class="card text-center h-100">
-                    <div class="image-container">
-                        <img src="https://i.pinimg.com/736x/4e/55/b8/4e55b89add9b83b4dc1ea16af44ae744.jpg" alt="Stefany Viveros" class="card-img-top img-fluid rounded-circle mx-auto mt-3">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Stefany Viveros</h5>
-                        <p class="card-text">Directora de Marketing</p>
-                    </div>
-                </div>
-            </div>
+            
             <div class="col-md-4 mb-4" data-aos="fade-up">
                 <div class="card text-center h-100">
                     <div class="image-container">
