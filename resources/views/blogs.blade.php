@@ -178,20 +178,26 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="comments-list">
-                                        @foreach($blog->comments as $comment)
-                                            <div class="comment">
-                                                <p>{{ $comment->content }}</p>
+                                       @foreach($blog->comments as $comment)
+                                          <div class="comment">
+                                            <p>{{ $comment->content }}</p>
+                                              <!-- Contenedor para los botones de acción -->
+                                              <div class="comment-actions">
+                                             <!-- Verifica si el usuario autenticado es el dueño del comentario -->
+                                               @if(Auth::id() === $comment->user_id)  
                                                 <div class="d-flex justify-content-end">
-                                                    <button onclick="editComment({{ $comment->id }}, '{{ $comment->content }}')" class="btn btn-sm btn-primary edit-comment">
-                                                        <i class="fas fa-edit"></i> Editar
-                                                    </button>
-                                                    <button onclick="deleteComment({{ $comment->id }})" class="btn btn-sm btn-danger delete-comment">
-                                                        <i class="fas fa-trash-alt"></i> Eliminar
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
+                                                  <button onclick="editComment({{ $comment->id }}, '{{ $comment->content }}')" class="btn btn-sm btn-primary edit-comment">
+                                              <i class="fas fa-edit"></i> Editar
+                                          </button>
+                                         <button onclick="deleteComment({{ $comment->id }})" class="btn btn-sm btn-danger delete-comment">
+                                            <i class="fas fa-trash-alt"></i> Eliminar
+                                               </button>
+                                          </div>
+                                      @endif
+                                  </div>
+                               </div>
+                            @endforeach
+                               </div>
                                     <div class="comment-section">
                                         <form action="{{ route('comments.store') }}" method="POST">
                                             @csrf
