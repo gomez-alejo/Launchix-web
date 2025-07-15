@@ -61,6 +61,13 @@
     .card:hover {
       transform: translateY(-5px);
     }
+    .card-img-top {
+    width: 300px !important;
+    height: 300px !important;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+} 
 
     .video-container {
       position: relative;
