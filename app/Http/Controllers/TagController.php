@@ -12,7 +12,7 @@ class TagController extends Controller
     {
         // Iniciar una consulta base para el modelo Area
         // $tags = Tag::included()->get();
-        $tags=Tag::included()->filter()->get(); 
+        $tags=Tag::included()->filter()->sort()->getOrPaginate();; 
         return response()->json($tags);
     }
 

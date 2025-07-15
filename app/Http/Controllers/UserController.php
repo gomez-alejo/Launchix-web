@@ -16,7 +16,7 @@ class UserController extends Controller
     {
         // Iniciar una consulta base para el modelo Area
         // $users = User::included()->get();
-        $users=User::included()->filter()->get();
+        $users=User::included()->filter()->sort()->getOrPaginate();;
         return response()->json($users);
     }
 

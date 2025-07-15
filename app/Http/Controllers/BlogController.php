@@ -14,29 +14,58 @@ class BlogController extends Controller
      *
      * @return \Illuminate\View\View
      */
+    // public function index()
+    // {
+    //     // Obtiene todos los blogs desde la base de datos, cargando los comentarios asociados
+    //     $blogs = Blog::with('comments')->get();
+
+    //     // Obtiene todas las categorías desde la base de datos
+    //     $categories = Category::all();
+
+    //     // Retorna la vista de blogs con los datos de los blogs y las categorías
+    //     return view('blogs', compact('blogs', 'categories'));
+
+
+
+    //     // Obtiene todos los blogs desde la base de datos, cargando los comentarios asociad
+
+    //     // Iniciar una consulta base para el modelo Area
+    //     $blogs = Blog::included()->get();
+    //     // return response()->json($blogs);
+        
+    //     // $blogs = Blog::included()->filter()->sort()->get();
+    //     return response()->json($blogs);
+        
+    // }
+
+//////////////////////////////
+
     public function index()
-    {
-        // Obtiene todos los blogs desde la base de datos, cargando los comentarios asociados
-        $blogs = Blog::with('comments')->get();
+{
+    // Obtiene todos los blogs desde la base de datos, aplicando included, filter y sort
+    $blogs = Blog::included()->filter()->sort()->getOrPaginate();
 
-        // Obtiene todas las categorías desde la base de datos
-        $categories = Category::all();
+    // Obtiene todas las categorías desde la base de datos
+    $categories = Category::all();
 
+    // Verifica si la solicitud espera una respuesta JSON
+
+    //para que funcione este en potsman al lado donde dice"params", "Authorization" al lado dice headers se ingresa ahi en la parte de key se pone "Accept" y en value se pone: "application/json"
+    if (request()->expectsJson()) {
+        // Retorna los blogs en formato JSON
+        return response()->json([
+            'blogs' => $blogs,
+            'categories' => $categories
+        ]);
+    } else {
         // Retorna la vista de blogs con los datos de los blogs y las categorías
         return view('blogs', compact('blogs', 'categories'));
-
-
-
-        // Obtiene todos los blogs desde la base de datos, cargando los comentarios asociad
-
-        // Iniciar una consulta base para el modelo Area
-        // $blogs = Blog::included()->get();
-        // return response()->json($blogs);
-        
-        $blogs = Blog::included()->filter()->get();
-        return response()->json($blogs);
-        
     }
+}
+
+
+
+
 
     public function store(Request $request)
     {

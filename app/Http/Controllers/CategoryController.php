@@ -12,7 +12,7 @@ class CategoryController extends Controller
     {
         // Iniciar una consulta base para el modelo Area
         // $categories = Category::included()->get();
-        $categories=Category::included()->filter()->get();
+        $categories=Category::included()->filter()->sort()->getOrPaginate();
         return response()->json($categories);
     }
 
