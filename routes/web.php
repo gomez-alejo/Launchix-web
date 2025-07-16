@@ -78,3 +78,4 @@ Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->nam
 
 Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
 Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
+Route::post('/profile/picture', [UserController::class, 'updateProfilePicture'])->name('profile.picture.update');

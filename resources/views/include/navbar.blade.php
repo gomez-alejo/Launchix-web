@@ -146,12 +146,13 @@
             notificationCount.textContent = data.unreadCount;
             notificationMenu.innerHTML = '';
 
-            // Si no hay notificaciones, muestra un mensaje amigable
-            if (data.notificaciones.length === 0) {
+            // Si no hay notificaciones, muestra un mensaje amigable y visible
+            if (Array.isArray(data.notificaciones) && data.notificaciones.length === 0) {
                 const emptyMsg = document.createElement('div');
-                emptyMsg.className = 'dropdown-item text-center text-muted';
-                emptyMsg.textContent = 'No tienes notificaciones por el momento';
+                emptyMsg.className = 'dropdown-item text-center';
+                emptyMsg.innerHTML = '<i class="fas fa-bell-slash fa-2x text-muted"></i><br><span class="text-muted">No tienes notificaciones por el momento</span>';
                 notificationMenu.appendChild(emptyMsg);
+                // El mensaje se muestra siempre que el array esté vacío
             } else {
                 // Si hay notificaciones, las muestra en el menú
                 data.notificaciones.forEach(notificacion => {
