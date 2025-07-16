@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\EmprendimientoController;
 
 // Ruta para la página principal
 Route::get('/launchix', function () {
@@ -21,6 +22,14 @@ Route::get('/launchix/blogs', function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Ruta para vista de emprendimiento
+
+Route::get('/emprendimiento', function () {
+    return view('emprendimiento');
+})->name('emprendimiento');
+
+Route::view('/emprendimiento', 'emprendimiento')->name('emprendimiento');
 
 // Ruta para la página de recuperación de contraseña
 Route::get('/recuperacion', function () {

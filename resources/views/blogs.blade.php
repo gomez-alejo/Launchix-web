@@ -266,15 +266,16 @@
                     </div>
 
                     <!-- Modal para Comentarios -->
+
                     <div class="modal fade" id="commentsModal{{ $blog->id }}" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel{{ $blog->id }}" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="commentsModalLabel{{ $blog->id }}">Comentarios</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
                                 </div>
                                 <div class="modal-body">
-                                    <!-- Lista de comentarios -->
                                     <div class="comments-list">
                                        @foreach($blog->comments as $comment)
                                           <div class="comment">

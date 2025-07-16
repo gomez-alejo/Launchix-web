@@ -12,7 +12,7 @@ class LikeController extends Controller
     {
         // Iniciar una consulta base para el modelo Area
         // $likes = Like::included()->get();
-        $likes = Like::included()->filter()->get();
+        $likes = Like::included()->filter()->sort()->getOrPaginate();;
         return response()->json($likes);
     }
 

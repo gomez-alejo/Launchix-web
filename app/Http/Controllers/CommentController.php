@@ -13,7 +13,7 @@ class CommentController extends Controller
     {
         // Iniciar una consulta base para el modelo Area
         // $comments = Comment::included()->get();
-        $comments=Comment::included()->filter()->get();
+        $comments=Comment::included()->filter()->sort()->getOrPaginate();
         return response()->json($comments);
     }
 
@@ -22,7 +22,6 @@ class CommentController extends Controller
         $request->validate([
             'content' => 'required|string',
             'blog_id' => 'required|exists:blogs,id',
-            'user_id' => 'required|exists:users,id',
         ]);
 
         Comment::create([
