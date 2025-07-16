@@ -98,6 +98,8 @@
     </div>
 @endif
 
+<link rel="stylesheet" href="/css/notifications.css">
+
 <script>
     // Función para confirmar la eliminación de la cuenta
     function confirmarEliminarCuenta(event) {
@@ -156,10 +158,20 @@
             } else {
                 // Si hay notificaciones, las muestra en el menú
                 data.notificaciones.forEach(notificacion => {
+                    // Determinar el tipo de notificación para el color y el icono
+                    let notifClass = 'notif-default';
+                    let notifIcon = '<i class="fas fa-bell notif-icon"></i>';
+                    if (notificacion.type === 'like') {
+                        notifClass = 'notif-like';
+                        notifIcon = '<i class="fas fa-thumbs-up notif-icon" style="color:blue"></i>';
+                    } else if (notificacion.type === 'comment') {
+                        notifClass = 'notif-comment';
+                        notifIcon = '<i class="fas fa-comment notif-icon" style="color:#2979ff"></i>';
+                    }
                     const notificationItem = document.createElement('a');
-                    notificationItem.className = 'dropdown-item';
+                    notificationItem.className = 'dropdown-item ' + notifClass;
                     notificationItem.href = notificacion.url;
-                    notificationItem.textContent = notificacion.message;
+                    notificationItem.innerHTML = notifIcon + '<span class="notif-message">' + notificacion.message + '</span>';
                     notificationMenu.appendChild(notificationItem);
                 });
             }

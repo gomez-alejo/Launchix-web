@@ -26,6 +26,9 @@ Route::resource('comments',CommentController::class);
 Route::resource('tags',TagController::class);
 Route::resource('likes',LikeController::class);
 
+// Ruta personalizada para unlike (quitar me gusta de un blog por usuario)
+Route::delete('likes/{blog_id}/user/{user_id}', [LikeController::class, 'destroyByBlogAndUser']);
+
 Route::resource('/categories',categoryController::class);
 
 

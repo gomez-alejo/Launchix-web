@@ -140,6 +140,10 @@
             <!-- Contenedor de blogs -->
             <div class="row blog-container" id="blogContainer">
                 @foreach($blogs as $blog)
+                    @php
+                        // Contar likes para cada blog
+                        $likesCount = $blog->likes->count();
+                    @endphp
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-header d-flex justify-content-end">
@@ -162,7 +166,7 @@
                                         <i class="fas fa-comment"></i> Comentarios
                                     </button>
                                     <button class="btn btn-link like-button" data-blog-id="{{ $blog->id }}">
-                                        <i class="fas fa-heart"></i> Me gusta
+                                        <i class="fas fa-heart"></i> Me gusta <span class="like-count" id="like-count-{{ $blog->id }}">{{ $likesCount }}</span>
                                     </button>
                                 </div>
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#blogModal{{ $blog->id }}">Leer más</button>
@@ -292,8 +296,10 @@
                                                         <i class="fas fa-trash-alt"></i> Eliminar
                                                     </button>
                                                 </div>
-                                            </div>
-                                        @endforeach
+                                               @endif
+                                              </div>
+                                          </div>
+                                       @endforeach
                                     </div>
                                     <!-- Sección para añadir comentarios -->
                                     <div class="comment-section">
@@ -396,12 +402,61 @@
             });
         });
 
-        // Función para manejar los "me gusta"
+        // Función para manejar los "me gusta" y "unlike"
         document.querySelectorAll('.like-button').forEach(button => {
             button.addEventListener('click', function() {
                 const blogId = this.getAttribute('data-blog-id');
-                this.classList.toggle('liked');
-                alert('Me gusta en el blog: ' + blogId);
+                const likeButton = this;
+                const likeCountSpan = document.getElementById('like-count-' + blogId);
+                let currentLikes = parseInt(likeCountSpan.textContent);
+                // Si el botón ya tiene la clase 'liked', significa que el usuario ya dio like y quiere quitarlo (unlike)
+                const isLiked = likeButton.classList.contains('liked');
+                if (isLiked) {
+                    // Quitar el like (unlike): enviar petición DELETE al backend
+                    fetch(`/api/likes/${blogId}/user/{{ Auth::id() }}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Si se eliminó correctamente, actualiza el contador y el color
+                        likeButton.classList.remove('liked');
+                        likeCountSpan.textContent = Math.max(currentLikes - 1, 0);
+                    })
+                    .catch(error => {
+                        alert('Error al quitar el me gusta.');
+                    });
+                } else {
+                    // Dar like: enviar petición POST al backend
+                    fetch('/api/likes', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            blog_id: blogId,
+                            user_id: {{ Auth::id() }}
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.id) {
+                            // Like guardado correctamente, incrementa el contador y marca el botón
+                            likeButton.classList.add('liked');
+                            likeCountSpan.textContent = currentLikes + 1;
+                        } else if(data.errors && data.errors.blog_id) {
+                            alert('Ya diste me gusta a este blog.');
+                        }
+                    })
+                    .catch(error => {
+                        alert('Error al dar me gusta.');
+                    });
+                }
             });
         });
     });

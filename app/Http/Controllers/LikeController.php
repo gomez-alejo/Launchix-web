@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Like;
+use App\Models\Blog;
+use App\Models\User;
+use App\Notifications\BlogInteractionNotification;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class LikeController extends Controller
@@ -32,6 +36,25 @@ class LikeController extends Controller
         ]);
 
         $like = Like::create($request->all());
+
+        // Obtener el blog y su dueño
+        $blog = Blog::find($request->blog_id);
+        $blogOwner = $blog->user;
+        $actor = User::find($request->user_id); // Usuario que da like
+
+        // Notificar al dueño del blog si el que da like no es el mismo dueño
+        if ($blogOwner && $blogOwner->id !== $actor->id) {
+            // Se envía la notificación personalizada para like
+            $blogOwner->notify(new BlogInteractionNotification(
+                'like',
+                $blog,
+                $actor
+            ));
+        }
+
+        // Comentario para el equipo: Se agregó el envío de notificación al dueño del blog cuando alguien le da like, usando BlogInteractionNotification.
+        // Si el usuario da like en su propio blog, no se notifica a sí mismo.
+
         return response()->json($like);
     }
 
@@ -54,8 +77,21 @@ class LikeController extends Controller
     }
 
     
-    public function destroy(Like $like)
+    /**
+     * Elimina el like de un usuario para un blog específico (unlike).
+     * Endpoint: DELETE /api/likes/{blog_id}/user/{user_id}
+     * Devuelve JSON con mensaje de éxito o error.
+     */
+    public function destroyByBlogAndUser($blog_id, $user_id)
     {
-        //
+        $like = Like::where('blog_id', $blog_id)->where('user_id', $user_id)->first();
+        if ($like) {
+            $like->delete();
+            // Comentario: Se eliminó el like correctamente (unlike)
+            return response()->json(['message' => 'Like eliminado correctamente.']);
+        } else {
+            // Comentario: No se encontró el like para eliminar
+            return response()->json(['message' => 'No se encontró el like.'], 404);
+        }
     }
 }

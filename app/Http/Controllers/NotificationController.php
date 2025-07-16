@@ -25,6 +25,7 @@ class NotificationController extends Controller
             return [
                 'message' => $n->data['message'] ?? 'Tienes una nueva notificación',
                 'url' => $n->data['url'] ?? '#',
+                'type' => $n->data['type'] ?? 'default', // Agrega el tipo para el ícono
                 'read' => $n->read_at ? true : false,
                 'created_at' => $n->created_at
             ];
@@ -50,3 +51,5 @@ class NotificationController extends Controller
         return response()->json(['message' => 'Notification marcada como leida']);
     }
 }
+
+// Comentario: Ahora el frontend recibirá el campo 'type' para mostrar el ícono correcto en la notificación.

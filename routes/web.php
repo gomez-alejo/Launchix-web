@@ -7,7 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\EmprendimientoController;
+//use App\Http\Controllers\EmprendimientoController;
 
 // Ruta para la página principal
 Route::get('/launchix', function () {
