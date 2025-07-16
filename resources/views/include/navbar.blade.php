@@ -163,14 +163,21 @@
                     let notifIcon = '<i class="fas fa-bell notif-icon"></i>';
                     if (notificacion.type === 'like') {
                         notifClass = 'notif-like';
-                        notifIcon = '<i class="fas fa-thumbs-up notif-icon" style="color:blue"></i>';
+                        notifIcon = '<i class="fas fa-thumbs-up notif-icon" style="color:#2979ff"></i>';
                     } else if (notificacion.type === 'comment') {
                         notifClass = 'notif-comment';
                         notifIcon = '<i class="fas fa-comment notif-icon" style="color:#2979ff"></i>';
                     }
                     const notificationItem = document.createElement('a');
                     notificationItem.className = 'dropdown-item ' + notifClass;
-                    notificationItem.href = notificacion.url;
+                    // Si la notificación es de blog, redirigir a blogs con highlight
+                    if (notificacion.url && notificacion.url.match(/\/blogs\/(\d+)/)) {
+                        const blogId = notificacion.url.match(/\/blogs\/(\d+)/)[1];
+                        notificationItem.href = '/blogs?highlight=' + blogId;
+                        notificationItem.target = '_self';
+                    } else {
+                        notificationItem.href = notificacion.url;
+                    }
                     notificationItem.innerHTML = notifIcon + '<span class="notif-message">' + notificacion.message + '</span>';
                     notificationMenu.appendChild(notificationItem);
                 });
@@ -178,6 +185,19 @@
         })
         .catch(error => console.error('Error al cargar las notificaciones:', error));
     }
+
+    // Marcar todas las notificaciones como leídas al abrir el menú
+    document.getElementById('notificationDropdown').addEventListener('click', function() {
+        fetch('/notificaciones/read-all', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        }).then(() => {
+            document.getElementById('notificationCount').textContent = '0';
+        });
+    });
 
     // Cargar notificaciones al cargar la página
     document.addEventListener('DOMContentLoaded', function() {

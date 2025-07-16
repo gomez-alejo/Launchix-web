@@ -50,6 +50,19 @@ class NotificationController extends Controller
 
         return response()->json(['message' => 'Notification marcada como leida']);
     }
+
+    // Marca todas las notificaciones como leídas
+    public function markAllAsRead(Request $request)
+    {
+        $user = $request->user();
+        if ($user && method_exists($user, 'notifications')) {
+            $user->unreadNotifications->each(function($notification) {
+                $notification->read_at = now();
+                $notification->save();
+            });
+        }
+        return response()->json(['message' => 'Todas las notificaciones marcadas como leídas']);
+    }
 }
 
 // Comentario: Ahora el frontend recibirá el campo 'type' para mostrar el ícono correcto en la notificación.

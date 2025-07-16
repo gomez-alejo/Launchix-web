@@ -14,10 +14,6 @@ Route::get('/launchix', function () {
     return view('launchix');
 })->name('home');
 
-Route::get('/launchix/blogs', function () {
-    return view('blogs');
-})->name('blogs');
-
 // Rutas para autenticación
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -53,6 +49,8 @@ Route::middleware(['auth'])->group(function () {
        // Rutas para las notificaciones
     Route::get('/notificaciones', [NotificationController::class, 'getNotificaciones'])->name('notificaciones');
     Route::post('/notificaciones/{id}/read', [NotificationController::class, 'markAsRead'])->name('notificaciones.read');
+    // Marcar todas las notificaciones como leídas
+    Route::post('/notificaciones/read-all', [NotificationController::class, 'markAllAsRead'])->name('notificaciones.readAll');
 });
 
 // Ruta para soporte técnico
@@ -71,7 +69,7 @@ Route::post('/blogs', [BlogController::class, 'store'])->name('blogs.store');
 
 Route::get('/usuario', [UserController::class, 'showUsuarioView'])->name('usuario');
 
-    // En routes/web.php
+    // Asegurarse de que la ruta principal de blogs apunte al controlador
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
 
 
@@ -88,3 +86,6 @@ Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->nam
 Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
 Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
 Route::post('/profile/picture', [UserController::class, 'updateProfilePicture'])->name('profile.picture.update');
+
+// Ruta para ver el detalle de un blog individual desde la notificación
+Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blogs.show');

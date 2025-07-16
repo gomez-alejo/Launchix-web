@@ -37,11 +37,11 @@
     }
     .rating > input:checked ~ label,
     .rating > input:checked ~ label ~ label {
-        color: #ffc107;
+        color: #7597c9;
     }
     .rating > label:hover,
     .rating > label:hover ~ label {
-        color: #ffc107;
+        color: #166ff4;
     }
     /* Estilos para la sección de comentarios */
     .comment-section {
@@ -93,7 +93,10 @@
         cursor: pointer;
     }
     .like-button.liked {
-        color: #ff0000;
+        color: #166ff4;
+    }
+    .like-button:hover {
+        color: #166ff4;
     }
     /* Estilos para los botones de editar y eliminar comentarios */
     .edit-comment, .delete-comment {
@@ -114,6 +117,13 @@
         max-width: 100%;
         max-height: 100%;
         object-fit: contain;
+    }
+    .highlight-blog {
+        border: 3px solid #41cdf4 !important;
+        background: #87d4f5 !important;
+        box-shadow: 0 0 20px #605ddba0 !important;
+        transition: box-shadow 0.5s, border 0.5s, background 0.5s;
+        animation: blogPulse 1.2s 2;
     }
 </style>
 
@@ -144,7 +154,7 @@
                         // Contar likes para cada blog
                         $likesCount = $blog->likes->count();
                     @endphp
-                    <div class="col-md-4">
+                    <div class="col-md-4" id="blog-card-{{ $blog->id }}">
                         <div class="card">
                             <div class="card-header d-flex justify-content-end">
                                 <!-- Botón de opciones en la parte superior de la tarjeta -->
@@ -459,7 +469,36 @@
                 }
             });
         });
+
+        // Resaltar y hacer scroll al blog si hay highlight
+        const urlParams = new URLSearchParams(window.location.search);
+        const highlightId = urlParams.get('highlight');
+        if (highlightId) {
+            const blogCard = document.getElementById('blog-card-' + highlightId);
+            if (blogCard) {
+                blogCard.classList.add('highlight-blog');
+                blogCard.style.animation = 'blogPulse 1.2s 2'; // animación personalizada
+                blogCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => {
+                    blogCard.classList.remove('highlight-blog');
+                    blogCard.style.animation = '';
+                }, 3500);
+            }
+        }
     });
 </script>
-
+<style>
+@keyframes blogPulse {
+    0% { box-shadow: 0 0 0 0 #41cdf480; }
+    50% { box-shadow: 0 0 30px 10px #605ddbcc; }
+    100% { box-shadow: 0 0 0 0 #41cdf480; }
+}
+.highlight-blog {
+    border: 3px solid #41cdf4 !important;
+    background: #87d4f5 !important;
+    box-shadow: 0 0 20px #605ddba0 !important;
+    transition: box-shadow 0.5s, border 0.5s, background 0.5s;
+    animation: blogPulse 1.2s 2;
+}
+</style>
 @endsection

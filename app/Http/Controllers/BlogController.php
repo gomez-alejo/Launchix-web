@@ -154,9 +154,11 @@ class BlogController extends Controller
 
     public function show(Request $request, $id)
     {
-        // Iniciar una consulta base para el modelo Apprentice
-         $blogs = Blog::included()->findOrFail($id);
-        return response()->json($blogs);
+        $blog = Blog::with(['user', 'tags', 'comments', 'likes'])->findOrFail($id);
+        // Contadores para likes y comentarios
+        $blog->likes_count = $blog->likes->count();
+        $blog->comments_count = $blog->comments->count();
+        return view('blogs_show', compact('blog'));
     }
 
     /**
