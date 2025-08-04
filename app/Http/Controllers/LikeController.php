@@ -35,6 +35,20 @@ class LikeController extends Controller
             'user_id' => 'required|exists:users,id',
         ]);
 
+        // Buscar si ya existe un like para este usuario y blog
+        $existingLike = Like::where('user_id', $request->user_id)
+                            ->where('blog_id', $request->blog_id)
+                            ->first();
+
+        if ($existingLike) {
+            // Si ya existe, no se permite otro like
+            // Comentario: Se evita que el usuario pueda dar más de un like al mismo blog
+            return response()->json([
+                'message' => 'Ya diste like a este blog'
+            ], 409); // 409 = conflicto
+        }
+
+        // Si no existe, se crea el like
         $like = Like::create($request->all());
 
         // Obtener el blog y su dueño

@@ -175,7 +175,11 @@
                                     <button class="btn btn-link" data-bs-toggle="modal" data-bs-target="#commentsModal{{ $blog->id }}">
                                         <i class="fas fa-comment"></i> Comentarios
                                     </button>
-                                    <button class="btn btn-link like-button" data-blog-id="{{ $blog->id }}">
+                                    <!-- El botón tendrá la clase 'liked' si el usuario ya dio like a este blog -->
+                                    @php
+                                        $userLiked = $blog->likes->where('user_id', Auth::id())->count() > 0;
+                                    @endphp
+                                    <button class="btn btn-link like-button{{ $userLiked ? ' liked' : '' }}" data-blog-id="{{ $blog->id }}">
                                         <i class="fas fa-heart"></i> Me gusta <span class="like-count" id="like-count-{{ $blog->id }}">{{ $likesCount }}</span>
                                     </button>
                                 </div>
