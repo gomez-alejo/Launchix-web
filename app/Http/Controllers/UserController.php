@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Category;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -124,7 +126,6 @@ class UserController extends Controller
 {
     $user = Auth::user();
 
-    // Verificar que $user es una instancia del modelo User
     if (!$user instanceof \App\Models\User) {
         throw new \Exception('El usuario no es una instancia válida del modelo User.');
     }
@@ -133,20 +134,35 @@ class UserController extends Controller
         return redirect()->route('login')->with('error', 'Usuario no autenticado.');
     }
 
+    DB::beginTransaction();
+
     try {
-        // Elimina todos los comentarios asociados a los blogs del usuario
-        $blogs = $user->blogs;
-        foreach ($blogs as $blog) {
+        Log::info('Iniciando eliminación de blogs y comentarios');
+
+        // Eliminar likes del usuario (directos)
+        $user->likes()->delete();
+
+        // Eliminar blogs, sus likes y comentarios
+        foreach ($user->blogs as $blog) {
+            $blog->likes()->delete();
             $blog->comments()->delete();
             $blog->delete();
         }
 
-        // Elimina la cuenta del usuario
+        // Eliminar comentarios del usuario
+        $user->comments()->delete();
+
+        Log::info('Eliminando usuario');
         $user->delete();
 
         Auth::logout();
+        DB::commit();
+
+        Log::info('Cuenta eliminada correctamente');
         return redirect('/launchix')->with('success', 'Tu cuenta y todos tus blogs han sido eliminados correctamente.');
     } catch (\Exception $e) {
+        DB::rollBack();
+        Log::error('Error al eliminar la cuenta: ' . $e->getMessage());
         return redirect()->route('home')->with('error', 'Ocurrió un error al eliminar la cuenta: ' . $e->getMessage());
     }
 }

@@ -4,119 +4,7 @@
 
 @section('content')
     @vite(['resources/css/usuario.css'])
-    <style>
-    /* Estilos para el contenedor de blogs */
-    .blog-container {
-        margin-top: 30px;
-    }
-    /* Estilos para las tarjetas de blogs */
-    .card {
-        margin-bottom: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        height: 600px; /* Altura fija para las tarjetas */
-        display: flex;
-        flex-direction: column;
-    }
-    /* Estilos para el contenedor de búsqueda */
-    .search-container {
-        margin-bottom: 20px;
-    }
-    /* Estilos para el sistema de calificación */
-    .rating {
-        display: inline-block;
-        unicode-bidi: bidi-override;
-        direction: rtl;
-    }
-    .rating > input {
-        display: none;
-    }
-    .rating > label {
-        display: inline-block;
-        font-size: 20px;
-        color: #ccc;
-        cursor: pointer;
-    }
-    .rating > input:checked ~ label,
-    .rating > input:checked ~ label ~ label {
-        color: #ffc107;
-    }
-    .rating > label:hover,
-    .rating > label:hover ~ label {
-        color: #ffc107;
-    }
-    /* Estilos para la sección de comentarios */
-    .comment-section {
-        margin-top: 20px;
-    }
-    /* Estilos para la lista de comentarios */
-    .comments-list {
-        margin-top: 20px;
-    }
-    /* Estilos para cada comentario */
-    .comment {
-        border-bottom: 1px solid #eee;
-        padding: 10px 0;
-    }
-    /* Estilos para el título de la tarjeta */
-    .card-title {
-        font-size: 1.25rem;
-        margin-bottom: 0.75rem;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    /* Estilos para el texto de la tarjeta */
-    .card-text {
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    /* Estilos para el título del modal */
-    .modal-title {
-        word-wrap: break-word;
-        white-space: normal;
-    }
-    /* Estilos para el cuerpo del modal */
-    .modal-body p {
-        word-wrap: break-word;
-        white-space: normal;
-    }
-    /* Estilos para el botón de "me gusta" */
-    .like-button i, .btn-link i {
-        margin-right: 5px;
-    }
-    .like-button {
-        color: #ccc;
-        cursor: pointer;
-    }
-    .like-button.liked {
-        color: #ff0000;
-    }
-    /* Estilos para los botones de editar y eliminar comentarios */
-    .edit-comment, .delete-comment {
-        margin-left: 10px;
-    }
-    .edit-comment i, .delete-comment i {
-        margin-right: 5px;
-    }
-    /* Estilos para el contenedor de la imagen */
-    .card-img-container {
-        height: 250px; /* Aumentar la altura del contenedor de la imagen */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-    }
-    .card-img-container img {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-    }
-</style>
+
 
     <!-- Contenido principal de la página -->
     <div class="container mt-5 pt-5 my-5">
@@ -195,7 +83,7 @@
                                         <i class="fas fa-comment"></i> Comentarios
                                     </button>
                                     <button class="btn btn-link like-button" data-blog-id="{{ $blog->id }}">
-                                        <i class="fas fa-heart"></i> Me gusta
+                                        <i class="fas fa-thumbs-up"></i> Me gusta
                                     </button>
                                 </div>
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#blogModal{{ $blog->id }}">Leer más</button>
