@@ -239,12 +239,12 @@ class UserController extends Controller
         return view('partials.blogs', compact('blogs'));
     }
 
-    public function index(){
-        $user = User::all();
-        $data = [
-            'users' => $user,
-            'status' => 'success',
-        ];
-        return response()->json($data, 200);
-    }
+    // public function index(){
+    //     $user = User::all();
+    //     $data = [
+    //         'users' => $user,
+    //         'status' => 'success',
+    //     ];
+    //     return response()->json($data, 200);
+    // }
 }
