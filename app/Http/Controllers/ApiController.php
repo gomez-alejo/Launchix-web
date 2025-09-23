@@ -13,7 +13,6 @@ class ApiController extends Controller
      */
     public function index()
     {
-            {
         $user = User::all();
         $data = [
             'users' => $user,

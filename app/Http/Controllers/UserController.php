@@ -11,11 +11,46 @@ use App\Models\Category;
 
 class UserController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        // Iniciar una consulta base para el modelo Area
+        // $users = User::included()->get();
+        $users=User::included()->filter()->sort()->getOrPaginate();;
+        return response()->json($users);
+    }
+
+    public function store(Request $request)
+    {
+        // Validar los datos de entrada
+        $request->validate([
+            'firstName' => 'required|max:255',
+            'lastName'=> 'required|max:255',
+            'username'=> 'required|max:255',
+            'email' => 'required|max:255',
+            'password' => 'required|max:255',
+            'description' => 'required|max:255',
+        ]);
+
+        $user = User::create($request->all());
+        return response()->json($user);
+    }
+
+    public function show(Request $request, $id)
+    {
+        // Iniciar una consulta base para el modelo Area
+         $user = User::included()->findOrFail($id);
+        return response()->json($user);
+    }
+    
     // Muestra el perfil del usuario autenticado
     public function showProfile()
     {
         $user = Auth::user(); // Obtiene el usuario autenticado
-        return view('usuario', compact('user')); // Retorna la vista 'usuario' con los datos del usuario
+        $blogs = Blog::where('user_id', $user->id)->with('comments')->get(); // Obtiene los blogs del usuario con sus comentarios
+        $categories = Category::all(); // Obtiene todas las categorías
+
+        return view('usuario', compact('user', 'blogs', 'categories')); // Retorna la vista 'usuario' con los datos del usuario, blogs y categorías
     }
 
     // Actualiza el perfil del usuario
@@ -85,38 +120,47 @@ class UserController extends Controller
     }
 
     // Elimina la cuenta del usuario
-    public function eliminarCuenta(Request $request)
-    {
-        $user = Auth::user(); // Obtiene el usuario autenticado
+        public function eliminarCuenta(Request $request)
+{
+    $user = Auth::user();
 
-        if (!$user) {
-            return redirect()->route('login')->with('error', 'Usuario no autenticado.'); // Redirige si el usuario no está autenticado
-        }
-
-        try {
-            // Elimina todos los blogs asociados al usuario
-            Blog::where('user_id', $user->id)->delete();
-
-            // Elimina la cuenta del usuario
-            /** @var \App\Models\User $user */
-            $user->delete(); // Elimina la cuenta del usuario
-            Auth::logout(); // Cierra la sesión del usuario
-
-            return redirect('/launchix')->with('success', 'Tu cuenta y todos tus blogs han sido eliminados correctamente.'); // Redirige con mensaje de éxito
-        } catch (\Exception $e) {
-            return redirect()->route('home')->with('error', 'Ocurrió un error al eliminar la cuenta: ' . $e->getMessage()); // Manejo de errores
-        }
+    // Verificar que $user es una instancia del modelo User
+    if (!$user instanceof \App\Models\User) {
+        throw new \Exception('El usuario no es una instancia válida del modelo User.');
     }
 
-    // Cambia la contraseña del usuario
-    public function changePassword(Request $request)
-    {
-        $user = Auth::user(); // Obtiene el usuario autenticado
+    if (!$user) {
+        return redirect()->route('login')->with('error', 'Usuario no autenticado.');
+    }
 
-        // Valida los datos de entrada para el cambio de contraseña
-        $validatedData = $request->validate([
-            'current_password' => 'required',
-            'new_password' => 'required|string|min:8|confirmed',
+    try {
+        // Elimina todos los comentarios asociados a los blogs del usuario
+        $blogs = $user->blogs;
+        foreach ($blogs as $blog) {
+            $blog->comments()->delete();
+            $blog->delete();
+        }
+
+        // Elimina la cuenta del usuario
+        $user->delete();
+
+        Auth::logout();
+        return redirect('/launchix')->with('success', 'Tu cuenta y todos tus blogs han sido eliminados correctamente.');
+    } catch (\Exception $e) {
+        return redirect()->route('home')->with('error', 'Ocurrió un error al eliminar la cuenta: ' . $e->getMessage());
+    }
+}
+
+
+        // Cambia la contraseña del usuario
+        public function changePassword(Request $request)
+        {
+            $user = Auth::user(); // Obtiene el usuario autenticado
+
+            // Valida los datos de entrada para el cambio de contraseña
+            $validatedData = $request->validate([
+                'current_password' => 'required',
+                'new_password' => 'required|string|min:8|confirmed',
         ]);
 
         try {
@@ -136,25 +180,30 @@ class UserController extends Controller
         }
     }
 
-    // Actualiza la foto de perfil y la foto de portada
+    // Actualiza la foto de perfil y la foto de portada del usuario
     public function updateProfilePicture(Request $request)
     {
-        $user = Auth::user();
+        $user = Auth::user(); // Obtiene el usuario autenticado
 
+        // Si se subió una nueva foto de perfil
         if ($request->hasFile('profilePic')) {
             $profilePic = $request->file('profilePic');
-            $path = $profilePic->store('profile_pics', 'public'); // Guarda la imagen en storage/app/public/profile_pics
+            // Guarda la imagen en storage/app/public/profile_pics y almacena la ruta
+            $path = $profilePic->store('profile_pics', 'public');
             $user->profile_picture = $path;
         }
 
+        // Si se subió una nueva foto de portada
         if ($request->hasFile('coverPic')) {
             $coverPic = $request->file('coverPic');
-            $path = $coverPic->store('cover_pics', 'public'); // Guarda la imagen en storage/app/public/cover_pics
+            // Guarda la imagen en storage/app/public/cover_pics y almacena la ruta
+            $path = $coverPic->store('cover_pics', 'public');
             $user->cover_picture = $path;
         }
         /** @var \App\Models\User $user */
-        $user->save();
+        $user->save(); // Guarda los cambios en la base de datos
 
+        // Redirige al perfil con mensaje de éxito
         return redirect()->route('usuario')->with('success', 'Fotos actualizadas exitosamente.');
     }
 
@@ -163,8 +212,9 @@ class UserController extends Controller
     {
         $user = Auth::user(); // Obtener el usuario autenticado
         $categories = Category::all(); // Obtener todas las categorías
+        $blogs = $user->blogs; // Obtener todos los blogs del usuario
 
-        return view('usuario', compact('user', 'categories'));
+        return view('usuario', compact('user', 'categories', 'blogs'));
     }
 
     public function getUserBlogs($userId)

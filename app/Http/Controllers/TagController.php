@@ -7,57 +7,53 @@ use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        //
+        // Iniciar una consulta base para el modelo Area
+        // $tags = Tag::included()->get();
+        $tags=Tag::included()->filter()->sort()->getOrPaginate();; 
+        return response()->json($tags);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
-        //
+        // Validar los datos de entrada
+        $request->validate([
+            'name' => 'required|max:255',
+        ]);
+
+        $tag = Tag::create($request->all());
+        return response()->json($tag);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Tag $tag)
+
+    public function show(Request $request, $id)
     {
-        //
+        // Iniciar una consulta base para el modelo Area
+         $tag = Tag::included()->findOrFail($id);
+        return response()->json($tag);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(Tag $tag)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, Tag $tag)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(Tag $tag)
     {
         //

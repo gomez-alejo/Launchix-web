@@ -6,21 +6,26 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CommentController;
-
+use App\Http\Controllers\NotificationController;
+//use App\Http\Controllers\EmprendimientoController;
 
 // Ruta para la página principal
 Route::get('/launchix', function () {
     return view('launchix');
 })->name('home');
 
-Route::get('/launchix/blogs', function () {
-    return view('blogs');
-})->name('blogs');
-
 // Rutas para autenticación
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Ruta para vista de emprendimiento
+
+Route::get('/emprendimiento', function () {
+    return view('emprendimiento');
+})->name('emprendimiento');
+
+Route::view('/emprendimiento', 'emprendimiento')->name('emprendimiento');
 
 // Ruta para la página de recuperación de contraseña
 Route::get('/recuperacion', function () {
@@ -40,12 +45,21 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
     Route::put('/update-account-info', [UserController::class, 'updateAccountInfo'])->name('update-account-info');
     Route::delete('/eliminar-cuenta', [UserController::class, 'eliminarCuenta'])->name('eliminar-cuenta');
+
+       // Rutas para las notificaciones
+    Route::get('/notificaciones', [NotificationController::class, 'getNotificaciones'])->name('notificaciones');
+    Route::post('/notificaciones/{id}/read', [NotificationController::class, 'markAsRead'])->name('notificaciones.read');
+    // Marcar todas las notificaciones como leídas
+    Route::post('/notificaciones/read-all', [NotificationController::class, 'markAllAsRead'])->name('notificaciones.readAll');
 });
 
 // Ruta para soporte técnico
 Route::get('/soporte-tecnico', function () {
     return view('soporte-tecnico');
 })->name('soporte-tecnico');
+
+
+//Route::get('/usuario', [UserController::class, 'showUsuarioView'])->name('usuario');
 
 
 
@@ -55,7 +69,7 @@ Route::post('/blogs', [BlogController::class, 'store'])->name('blogs.store');
 
 Route::get('/usuario', [UserController::class, 'showUsuarioView'])->name('usuario');
 
-    // En routes/web.php
+    // Asegurarse de que la ruta principal de blogs apunte al controlador
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
 
 
@@ -67,5 +81,11 @@ Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->nam
 Route::post('/comments/{comment}/update', [CommentController::class, 'update'])->name('comments.update');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
-Route::get('/usuario/blogs/{userId}', [UserController::class, 'getUserBlogs'])->name('usuario.blogs');
+// Route::get('/usuario/blogs/{userId}', [UserController::class, 'getUserBlogs'])->name('usuario.blogs');
 
+Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
+Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
+Route::post('/profile/picture', [UserController::class, 'updateProfilePicture'])->name('profile.picture.update');
+
+// Ruta para ver el detalle de un blog individual desde la notificación
+Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blogs.show');

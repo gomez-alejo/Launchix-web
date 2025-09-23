@@ -213,7 +213,42 @@ body {
       margin-bottom: 20px;
     }
   }
-  
+  /* Estilo para el ícono de notificaciones */
+#notificationDropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Estilo para el contador de notificaciones */
+#notificationCount {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+}
+
+/* Estilo para el menú desplegable de notificaciones */
+#notificationMenu {
+    min-width: 250px;
+}
+
+/* Estilo para los elementos del menú desplegable */
+#notificationMenu .dropdown-item {
+    white-space: normal;
+    word-wrap: break-word;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Estilo para el último elemento del menú desplegable */
+#notificationMenu .dropdown-item:last-child {
+    border-bottom: none;
+}
+
   
   
   

@@ -3,7 +3,7 @@
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
         <div class="container-fluid">
             <!-- Logo y nombre de la marca -->
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{{ url('/launchix') }}">
                 <i class="fas fa-store"></i> Launchix
             </a>
             <!-- Botón para alternar la navegación en dispositivos móviles -->
@@ -22,6 +22,15 @@
                 <!-- Enlaces de navegación para el usuario -->
                 <ul class="navbar-nav">
                     @if(Auth::check())
+                    <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bell"></i>
+                                <span class="badge badge-danger" id="notificationCount">0</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationDropdown" id="notificationMenu">
+                                <!-- Las notificaciones se cargarán aquí -->
+                            </div>
+                        </li>
                         <!-- Menú desplegable para el perfil del usuario -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -89,6 +98,8 @@
     </div>
 @endif
 
+<link rel="stylesheet" href="/css/notifications.css">
+
 <script>
     // Función para confirmar la eliminación de la cuenta
     function confirmarEliminarCuenta(event) {
@@ -119,4 +130,80 @@
             form.submit();
         }
     }
+    // Función para cargar notificaciones
+    function cargarNotificaciones() {
+        fetch('/notificaciones', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })      
+        .then(response => response.json())
+        .then(data => {
+            const notificationCount = document.getElementById('notificationCount');
+            const notificationMenu = document.getElementById('notificationMenu');
+
+            notificationCount.textContent = data.unreadCount;
+            notificationMenu.innerHTML = '';
+
+            // Si no hay notificaciones, muestra un mensaje amigable y visible
+            if (Array.isArray(data.notificaciones) && data.notificaciones.length === 0) {
+                const emptyMsg = document.createElement('div');
+                emptyMsg.className = 'dropdown-item text-center';
+                emptyMsg.innerHTML = '<i class="fas fa-bell-slash fa-2x text-muted"></i><br><span class="text-muted">No tienes notificaciones por el momento</span>';
+                notificationMenu.appendChild(emptyMsg);
+                // El mensaje se muestra siempre que el array esté vacío
+            } else {
+                // Si hay notificaciones, las muestra en el menú
+                data.notificaciones.forEach(notificacion => {
+                    // Determinar el tipo de notificación para el color y el icono
+                    let notifClass = 'notif-default';
+                    let notifIcon = '<i class="fas fa-bell notif-icon"></i>';
+                    if (notificacion.type === 'like') {
+                        notifClass = 'notif-like';
+                        notifIcon = '<i class="fas fa-thumbs-up notif-icon" style="color:#2979ff"></i>';
+                    } else if (notificacion.type === 'comment') {
+                        notifClass = 'notif-comment';
+                        notifIcon = '<i class="fas fa-comment notif-icon" style="color:#2979ff"></i>';
+                    }
+                    const notificationItem = document.createElement('a');
+                    notificationItem.className = 'dropdown-item ' + notifClass;
+                    // Si la notificación es de blog, redirigir a blogs con highlight
+                    if (notificacion.url && notificacion.url.match(/\/blogs\/(\d+)/)) {
+                        const blogId = notificacion.url.match(/\/blogs\/(\d+)/)[1];
+                        notificationItem.href = '/blogs?highlight=' + blogId;
+                        notificationItem.target = '_self';
+                    } else {
+                        notificationItem.href = notificacion.url;
+                    }
+                    notificationItem.innerHTML = notifIcon + '<span class="notif-message">' + notificacion.message + '</span>';
+                    notificationMenu.appendChild(notificationItem);
+                });
+            }
+        })
+        .catch(error => console.error('Error al cargar las notificaciones:', error));
+    }
+
+    // Marcar todas las notificaciones como leídas al abrir el menú
+    document.getElementById('notificationDropdown').addEventListener('click', function() {
+        fetch('/notificaciones/read-all', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        }).then(() => {
+            document.getElementById('notificationCount').textContent = '0';
+        });
+    });
+
+    // Cargar notificaciones al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        cargarNotificaciones();
+
+        // Actualizar notificaciones cada 30 segundos
+        setInterval(cargarNotificaciones, 30000);
+    });
 </script>

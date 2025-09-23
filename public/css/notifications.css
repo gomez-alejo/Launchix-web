@@ -1,0 +1,74 @@
+/* Estilos personalizados para notificaciones tipo e-commerce */
+#notificationMenu {
+    min-width: 350px;
+    max-width: 400px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    padding: 0.5rem 0;
+}
+
+#notificationMenu .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 1rem;
+    transition: background 0.2s;
+    background: #f9f9f9;
+}
+#notificationMenu .dropdown-item:last-child {
+    border-bottom: none;
+}
+#notificationMenu .dropdown-item:hover {
+    background: #e6f0ff;
+    color: #1a237e;
+}
+
+/* Colores de acuerdo al branding Launchix (puedes ajustar) */
+#notificationMenu .notif-like {
+    border-left: 2px #ff4081;
+    background: #b5e5f8;
+}
+#notificationMenu .notif-comment {
+    border-left: 4px solid #2979ff;
+    background: #b5e5f8;
+}
+#notificationMenu .notif-default {
+    border-left: 4px solid #bdbdbd;
+    background: #8fb5f2;
+}
+
+#notificationMenu .notif-icon {
+    font-size: 1rem;
+    margin-right: 4px;
+}
+
+#notificationMenu .notif-message {
+    flex: 1;
+    font-weight: 500;
+}
+
+#notificationMenu .notif-time {
+    font-size: 0.85rem;
+    color: #aac1f4;
+    margin-left: 8px;
+}
+
+#notificationCount {
+    background: #ff4081;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 0.1em 0.45em;
+    font-size: 0.85em;
+    position:absolute;
+    top: 0px; /* Más arriba para no tapar la campana */
+    right: 0px; /* Más a la derecha para separarla del icono */
+    z-index: 2;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+#notificationDropdown .fa-bell {
+    font-size: 1.1em; /* Cambia el valor según el tamaño que desees */
+}
