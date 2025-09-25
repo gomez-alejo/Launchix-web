@@ -160,7 +160,7 @@
             <div class="col-md-4 mb-4" data-aos="fade-up">
                 <div class="card text-center h-100">
                     <div class="image-container">
-                        <img src="https://i.pinimg.com/736x/49/54/ae/4954ae32ae693128a1e85ede8ab8288d.jpg" alt="Alejandro Gómez" class="card-img-top img-fluid rounded-circle mx-auto mt-3">
+                        <img src="https://i.pinimg.com/736x/fe/d1/2a/fed12af4d53900865e32bc1820e858d7.jpg" alt="Alejandro Gómez" class="card-img-top img-fluid rounded-circle mx-auto mt-3">
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Alejandro Gómez</h5>
@@ -169,14 +169,14 @@
                 </div>
             </div>
             <!-- Repetir para otros miembros del equipo -->
-            
+
             <div class="col-md-4 mb-4" data-aos="fade-up">
                 <div class="card text-center h-100">
                     <div class="image-container">
-                        <img src="https://i.pinimg.com/736x/30/74/fd/3074fd1510f56394ca662e4169da23d0.jpg" alt="Manzano Manzano" class="card-img-top img-fluid rounded-circle mx-auto mt-3">
+                        <img src="https://i.ytimg.com/vi/TJbY74Y49FM/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AGaBIAC0AWKAgwIABABGF0gXShdMA8=&rs=AOn4CLDvvVHJdDyg_XrfNur3BMSC-G1KMg" alt="Manzano Manzano" class="card-img-top img-fluid rounded-circle mx-auto mt-3">
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">Manzano Manzano</h5>
+                        <h5 class="card-title">Sebastian Manzano</h5>
                         <p class="card-text">Desarrollador Principal</p>
                     </div>
                 </div>
@@ -195,18 +195,7 @@
             <div class="col-md-4 mb-4" data-aos="fade-up">
                 <div class="card text-center h-100">
                     <div class="image-container">
-                        <img src="https://i.pinimg.com/736x/fe/eb/5c/feeb5c1958bc21536ae2c4d02964483f.jpg" alt="Luis Enrique" class="card-img-top img-fluid rounded-circle mx-auto mt-3">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Luis Enrique</h5>
-                        <p class="card-text">Especialista en SEO</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4" data-aos="fade-up">
-                <div class="card text-center h-100">
-                    <div class="image-container">
-                        <img src="https://i.pinimg.com/736x/9d/4d/ce/9d4dcea8adb25678a27702ac93eb6e91.jpg" alt="Guillermo Gómez" class="card-img-top img-fluid rounded-circle mx-auto mt-3">
+                        <img src="https://ekosnegocios.com/image/posts/October2022/V3Pyk1Yd4bjnqyVU9VIj.jpg" alt="Guillermo Gómez" class="card-img-top img-fluid rounded-circle mx-auto mt-3">
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Guillermo Gómez</h5>
