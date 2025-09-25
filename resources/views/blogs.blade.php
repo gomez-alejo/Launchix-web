@@ -180,7 +180,7 @@
                                         $userLiked = $blog->likes->where('user_id', Auth::id())->count() > 0;
                                     @endphp
                                     <button class="btn btn-link like-button{{ $userLiked ? ' liked' : '' }}" data-blog-id="{{ $blog->id }}">
-                                        <i class="fas fa-heart"></i> Me gusta <span class="like-count" id="like-count-{{ $blog->id }}">{{ $likesCount }}</span>
+                                        <i class="fas fa-thumbs-up"></i><span class="like-count" id="like-count-{{ $blog->id }}">{{ $likesCount }}</span>
                                     </button>
                                 </div>
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#blogModal{{ $blog->id }}">Leer más</button>
