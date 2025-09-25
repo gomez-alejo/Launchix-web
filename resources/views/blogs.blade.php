@@ -127,62 +127,66 @@
         }
     </style>
 
-    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <div class="container mt-5 pt-5 my-5">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <!-- Contenedor de búsqueda -->
-                <div class="search-container">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Buscar blogs..." id="searchInput">
-                    </div>
-                    <!-- Botones de categoría -->
-                    <div class="btn-group" role="group" aria-label="Categorías">
-                        <button type="button" class="btn btn-outline-primary" data-category="all">Todas</button>
-                        <button type="button" class="btn btn-outline-primary" data-category="experiencia">Experiencia</button>
-                        <button type="button" class="btn btn-outline-primary" data-category="historia">Historia</button>
-                        <button type="button" class="btn btn-outline-primary" data-category="tecnologia">Tecnología</button>
-                        <button type="button" class="btn btn-outline-primary" data-category="viajes">Viajes</button>
-                        <button type="button" class="btn btn-outline-primary" data-category="cultura">Cultura</button>
-                    </div>
+{{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<div class="container mt-5 pt-5 my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <!-- Contenedor de búsqueda -->
+            <div class="search-container">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Buscar blogs..." id="searchInput">
                 </div>
-                <!-- Contenedor de blogs -->
-                <div class="row blog-container" id="blogContainer">
-                    @foreach($blogs as $blog)
-                        @php
-                            // Contar likes para cada blog
-                            $likesCount = $blog->likes->count();
-                        @endphp
-                        <div class="col-md-4" id="blog-card-{{ $blog->id }}">
-                            <div class="card">
-                                <div class="card-header d-flex justify-content-end">
-                                    <!-- Botón de opciones en la parte superior de la tarjeta -->
-                                    <button type="button" class="btn btn-link text-dark" data-bs-toggle="modal" data-bs-target="#optionsModal{{ $blog->id }}">
-                                        <i class="fas fa-ellipsis-v"></i>
+                <!-- Botones de categoría -->
+                <div class="btn-group" role="group" aria-label="Categorías">
+                    <button type="button" class="btn btn-outline-primary" data-category="all">Todas</button>
+                    <button type="button" class="btn btn-outline-primary" data-category="experiencia">Experiencia</button>
+                    <button type="button" class="btn btn-outline-primary" data-category="historia">Historia</button>
+                    <button type="button" class="btn btn-outline-primary" data-category="tecnologia">Tecnología</button>
+                    <button type="button" class="btn btn-outline-primary" data-category="viajes">Viajes</button>
+                    <button type="button" class="btn btn-outline-primary" data-category="cultura">Cultura</button>
+                </div>
+            </div>
+            <!-- Contenedor de blogs -->
+            <div class="row blog-container" id="blogContainer">
+                @foreach($blogs as $blog)
+                    @php
+                        // Contar likes para cada blog
+                        $likesCount = $blog->likes->count();
+                    @endphp
+                    <div class="col-md-4" id="blog-card-{{ $blog->id }}">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-end">
+                                <!-- Botón de opciones en la parte superior de la tarjeta -->
+                                <button type="button" class="btn btn-link text-dark" data-bs-toggle="modal" data-bs-target="#optionsModal{{ $blog->id }}">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        <div class="card-img-container">
+                            @if($blog->image_path)
+                                <img src="{{ asset($blog->image_path) }}" class="card-img-top" alt="{{ $blog->title }}">
+                            @endif
+                        </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $blog->title }}</h5>
+                                <p class="card-text">{{ Str::limit($blog->content, 100) }}</p>
+                                <span class="badge badge-primary">{{ strtolower($blog->category->name) }}</span>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <button class="btn btn-link" data-bs-toggle="modal" data-bs-target="#commentsModal{{ $blog->id }}">
+                                        <i class="fas fa-comment"></i> Comentarios
+                                    </button>
+                                    <!-- El botón tendrá la clase 'liked' si el usuario ya dio like a este blog -->
+                                    @php
+                                        $userLiked = $blog->likes->where('user_id', Auth::id())->count() > 0;
+                                    @endphp
+                                    <button class="btn btn-link like-button{{ $userLiked ? ' liked' : '' }}" data-blog-id="{{ $blog->id }}">
+                                        <i class="fas fa-thumbs-up"></i><span class="like-count" id="like-count-{{ $blog->id }}">{{ $likesCount }}</span>
                                     </button>
                                 </div>
-                            <div class="card-img-container">
-                                @if($blog->image_path)
-                                    <img src="{{ asset($blog->image_path) }}" class="card-img-top" alt="{{ $blog->title }}">
-                                @endif
-                            </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ $blog->title }}</h5>
-                                    <p class="card-text">{{ Str::limit($blog->content, 100) }}</p>
-                                    <span class="badge badge-primary">{{ strtolower($blog->category->name) }}</span>
-                                    <div class="d-flex justify-content-between align-items-center mt-3">
-                                        <button class="btn btn-link" data-bs-toggle="modal" data-bs-target="#commentsModal{{ $blog->id }}">
-                                            <i class="fas fa-comment"></i> Comentarios
-                                        </button>
-                                        <button class="btn btn-link like-button" data-blog-id="{{ $blog->id }}">
-                                            <i class="fas fa-thumbs-up"></i> Me gusta <span class="like-count" id="like-count-{{ $blog->id }}">{{ $likesCount }}</span>
-                                        </button>
-                                    </div>
-                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#blogModal{{ $blog->id }}">Leer más</button>
-                                </div>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#blogModal{{ $blog->id }}">Leer más</button>
                             </div>
                         </div>
+                    </div>
 
                         <!-- Modal de Opciones -->
                         <div class="modal fade" id="optionsModal{{ $blog->id }}" tabindex="-1" aria-labelledby="optionsModalLabel{{ $blog->id }}" aria-hidden="true">
