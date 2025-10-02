@@ -8,13 +8,17 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\LikeController;
 use Illuminate\Support\Facades\Route;
 
-Route::resource('users', UserController::class);
-Route::resource('blogs', BlogController::class);
-Route::resource('categories', CategoryController::class);
-Route::resource('comments', CommentController::class);
-Route::resource('tags', TagController::class);
-Route::resource('likes', LikeController::class);
+Route::prefix('api')->group(function () {
+    Route::apiResources([
+        'users' => UserController::class,
+        'blogs' => BlogController::class,
+        'categories' => CategoryController::class,
+        'comments' => CommentController::class,
+        'tags' => TagController::class,
+        'likes' => LikeController::class,
+    ]);
 
-// Ruta personalizada para unlike
-Route::delete('likes/{blog_id}/user/{user_id}', [LikeController::class, 'destroyByBlogAndUser'])
-    ->name('likes.destroyByBlogAndUser');
+    // Ruta personalizada para unlike
+    Route::delete('likes/{blog_id}/user/{user_id}', [LikeController::class, 'destroyByBlogAndUser'])
+        ->name('api.likes.destroyByBlogAndUser');
+});
